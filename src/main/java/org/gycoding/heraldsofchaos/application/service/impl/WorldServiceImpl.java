@@ -8,7 +8,7 @@ import org.gycoding.heraldsofchaos.application.dto.out.worlds.PlaceODTO;
 import org.gycoding.heraldsofchaos.application.dto.out.worlds.WorldODTO;
 import org.gycoding.heraldsofchaos.application.mapper.WorldServiceMapper;
 import org.gycoding.heraldsofchaos.application.service.WorldService;
-import org.gycoding.heraldsofchaos.domain.exceptions.FOTGAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.worlds.WorldMO;
 import org.gycoding.heraldsofchaos.domain.repository.WorldRepository;
@@ -38,9 +38,9 @@ public class WorldServiceImpl implements WorldService {
             Logger.error(String.format("An error has occurred while saving a world: %s.", world.identifier()), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -59,9 +59,9 @@ public class WorldServiceImpl implements WorldService {
             Logger.error(String.format("An error has occurred while updating a world: %s.", world.identifier()), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -78,9 +78,9 @@ public class WorldServiceImpl implements WorldService {
             Logger.error(String.format("An error has occurred while removing a world: %s.", identifier), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -91,9 +91,9 @@ public class WorldServiceImpl implements WorldService {
     public WorldODTO get(String identifier, String language) throws APIException {
         final var world = repository.get(identifier).orElseThrow(() ->
                 new APIException(
-                        FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
                 )
         );
 
@@ -108,9 +108,9 @@ public class WorldServiceImpl implements WorldService {
             return worlds.stream().map(world -> mapper.toODTO(world, language)).toList();
         } catch (NullPointerException e) {
             throw new APIException(
-                    FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
             );
         }
     }
@@ -123,9 +123,9 @@ public class WorldServiceImpl implements WorldService {
             return worlds.map(world -> mapper.toODTO(world, language).toMap());
         } catch (NullPointerException e) {
             throw new APIException(
-                    FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
             );
         }
     }

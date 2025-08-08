@@ -2,7 +2,7 @@ package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.
 
 import lombok.AllArgsConstructor;
 import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.FOTGAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.worlds.WorldMO;
 import org.gycoding.heraldsofchaos.domain.repository.WorldRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.WorldDatabaseMapper;
@@ -42,9 +42,9 @@ public class WorldRepositoryImpl implements WorldRepository {
     public WorldMO update(WorldMO world, List<String> places) throws APIException {
         final var persistedWorlds = repository.findByIdentifier(world.identifier()).orElseThrow(() ->
                 new APIException(
-                        FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
                 )
         );
 

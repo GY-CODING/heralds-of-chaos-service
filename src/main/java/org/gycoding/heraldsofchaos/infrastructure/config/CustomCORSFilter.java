@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.FOTGAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,9 +27,9 @@ public class CustomCORSFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write(
                     new APIException(
-                            FOTGAPIError.FORBIDDEN.getCode(),
-                            FOTGAPIError.FORBIDDEN.getMessage(),
-                            FOTGAPIError.FORBIDDEN.getStatus().value()
+                            HeraldsOfChaosAPIError.FORBIDDEN.getCode(),
+                            HeraldsOfChaosAPIError.FORBIDDEN.getMessage(),
+                            HeraldsOfChaosAPIError.FORBIDDEN.getStatus().value()
                     ).toString()
             );
         }

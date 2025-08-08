@@ -7,7 +7,7 @@ import org.gycoding.heraldsofchaos.application.dto.in.creatures.CreatureIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.creatures.CreatureODTO;
 import org.gycoding.heraldsofchaos.application.mapper.CreatureServiceMapper;
 import org.gycoding.heraldsofchaos.application.service.CreatureService;
-import org.gycoding.heraldsofchaos.domain.exceptions.FOTGAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.creatures.CreatureMO;
 import org.gycoding.heraldsofchaos.domain.repository.CreatureRepository;
@@ -37,9 +37,9 @@ public class CreatureServiceImpl implements CreatureService {
             Logger.error(String.format("An error has occurred while saving a creature: %s.", creature.identifier()), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -58,9 +58,9 @@ public class CreatureServiceImpl implements CreatureService {
             Logger.error(String.format("An error has occurred while updating a creature: %s.", creature.identifier()), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -77,9 +77,9 @@ public class CreatureServiceImpl implements CreatureService {
             Logger.error(String.format("An error has occurred while removing a creature: %s.", identifier), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -90,9 +90,9 @@ public class CreatureServiceImpl implements CreatureService {
     public CreatureODTO get(String identifier, String language) throws APIException {
         final var creature = repository.get(identifier).orElseThrow(() ->
                 new APIException(
-                        FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
                 )
         );
 
@@ -107,9 +107,9 @@ public class CreatureServiceImpl implements CreatureService {
             return creatures.stream().map(creature -> mapper.toODTO(creature, language)).toList();
         } catch (NullPointerException e) {
             throw new APIException(
-                    FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
             );
         }
     }
@@ -122,9 +122,9 @@ public class CreatureServiceImpl implements CreatureService {
             return creatures.map(creature -> mapper.toODTO(creature, language).toMap());
         } catch (NullPointerException e) {
             throw new APIException(
-                    FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
             );
         }
     }

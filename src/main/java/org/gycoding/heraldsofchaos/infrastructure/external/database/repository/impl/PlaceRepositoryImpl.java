@@ -2,7 +2,7 @@ package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.
 
 import lombok.AllArgsConstructor;
 import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.FOTGAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.worlds.PlaceMO;
 import org.gycoding.heraldsofchaos.domain.repository.PlaceRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.PlaceDatabaseMapper;
@@ -31,9 +31,9 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     public PlaceMO update(PlaceMO place) throws APIException {
         final var persistedPlace = repository.findByIdentifier(place.identifier()).orElseThrow(() ->
                 new APIException(
-                        FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
                 )
         );
 

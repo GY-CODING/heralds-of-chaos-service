@@ -7,7 +7,7 @@ import org.gycoding.heraldsofchaos.application.dto.in.characters.CharacterIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.characters.CharacterODTO;
 import org.gycoding.heraldsofchaos.application.mapper.CharacterServiceMapper;
 import org.gycoding.heraldsofchaos.application.service.CharacterService;
-import org.gycoding.heraldsofchaos.domain.exceptions.FOTGAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.characters.CharacterMO;
 import org.gycoding.heraldsofchaos.domain.repository.CharacterRepository;
@@ -37,9 +37,9 @@ public class CharacterServiceImpl implements CharacterService {
             Logger.error(String.format("An error has occurred while saving a character: %s.", character.identifier()), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -58,9 +58,9 @@ public class CharacterServiceImpl implements CharacterService {
             Logger.error(String.format("An error has occurred while updating a character: %s.", character.identifier()), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -77,9 +77,9 @@ public class CharacterServiceImpl implements CharacterService {
             Logger.error(String.format("An error has occurred while removing a character: %s.", identifier), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -90,9 +90,9 @@ public class CharacterServiceImpl implements CharacterService {
     public CharacterODTO get(String identifier, String language) throws APIException {
         final var character = repository.get(identifier).orElseThrow(() ->
                 new APIException(
-                        FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
                 )
         );
 
@@ -109,9 +109,9 @@ public class CharacterServiceImpl implements CharacterService {
                     .toList();
         } catch (NullPointerException e) {
             throw new APIException(
-                    FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
             );
         }
     }
@@ -124,9 +124,9 @@ public class CharacterServiceImpl implements CharacterService {
             return characters.map(character -> mapper.toODTO(character, language).toMap());
         } catch (NullPointerException e) {
             throw new APIException(
-                    FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
             );
         }
     }
