@@ -1,5 +1,6 @@
 package org.gycoding.heraldsofchaos.infrastructure.api.controller.management;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.service.CharacterService;
@@ -17,12 +18,12 @@ public class CharacterManagementController {
     private final CharacterControllerMapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<?> save(@RequestBody CharacterRQDTO character) throws APIException {
+    public ResponseEntity<?> save(@Valid @RequestBody CharacterRQDTO character) throws APIException {
         return ResponseEntity.ok(mapper.toRSDTO(service.save(mapper.toIDTO(character))));
     }
 
     @PatchMapping("")
-    public ResponseEntity<?> update(@RequestBody CharacterRQDTO character, @RequestParam String id) throws APIException {
+    public ResponseEntity<?> update(@Valid @RequestBody CharacterRQDTO character, @RequestParam String id) throws APIException {
         return ResponseEntity.ok(mapper.toRSDTO(service.update(mapper.toIDTO(character, id))));
     }
 

@@ -13,5 +13,6 @@ public interface ItemServiceMapper {
 
     @Mapping(target = "name", expression = "java(StringTranslator.translate(item.name(), language))")
     @Mapping(target = "description", expression = "java(StringTranslator.translate(item.description(), language))")
+    @Mapping(target = "type", expression = "java(StringTranslator.translate(item.type(), language))")
     ItemODTO toODTO(ItemMO item, String language);
 }

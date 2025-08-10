@@ -2,7 +2,7 @@ package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.
 
 import lombok.AllArgsConstructor;
 import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.FOTGAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.characters.CharacterMO;
 import org.gycoding.heraldsofchaos.domain.repository.CharacterRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.CharacterDatabaseMapper;
@@ -29,9 +29,9 @@ public class CharacterRepositoryImpl implements CharacterRepository {
     public CharacterMO save(CharacterMO character) throws APIException {
         final var persistedWorld = worldRepository.findByIdentifier(character.world()).orElseThrow(() ->
                 new APIException(
-                        FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
                 )
         );
 
@@ -44,9 +44,9 @@ public class CharacterRepositoryImpl implements CharacterRepository {
     public CharacterMO update(CharacterMO character) throws APIException {
         final var persistedCharacter = repository.findByIdentifier(character.identifier()).orElseThrow(() ->
                 new APIException(
-                        FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
                 )
         );
 
@@ -54,7 +54,7 @@ public class CharacterRepositoryImpl implements CharacterRepository {
 
         final var persistedWorld = worldRepository.findByIdentifier(character.world()).orElse(null);
 
-        Logger.debug(String.format("World searched (not specifically found) for character: %s", character.identifier()), character.world());
+        Logger.debug(String.format("World searched (not necessary found) for character: %s", character.identifier()), character.world());
 
         return mapper.toMO(repository.save(mapper.toUpdatedEntity(persistedCharacter, character, persistedWorld)));
     }

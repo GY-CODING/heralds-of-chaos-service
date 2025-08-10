@@ -8,10 +8,7 @@ import org.gycoding.heraldsofchaos.infrastructure.api.mapper.PlaceControllerMapp
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.WorldControllerMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/worlds")
@@ -25,8 +22,8 @@ public class WorldDataController {
 
     private final PlaceControllerMapper placeMapper;
 
-    @GetMapping("/get")
-    public ResponseEntity<?> getWorld(@RequestParam String id, @RequestParam String lang) throws APIException {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getWorld(@PathVariable String id, @RequestParam String lang) throws APIException {
         return ResponseEntity.ok(worldMapper.toRSDTO(worldService.get(id, lang)));
     }
 
@@ -40,23 +37,23 @@ public class WorldDataController {
         return ResponseEntity.ok(worldService.page(pageable, lang).getContent());
     }
 
-    @GetMapping("/places/get")
-    public ResponseEntity<?> getPlace(@RequestParam String id, @RequestParam String lang) throws APIException {
+    @GetMapping("/places/{id}")
+    public ResponseEntity<?> getPlace(@PathVariable String id, @RequestParam String lang) throws APIException {
         return ResponseEntity.ok(placeMapper.toRSDTO(placeService.get(id, lang)));
     }
 
-    @GetMapping("/places/listAll")
+    @GetMapping("/places/list")
     public ResponseEntity<?> listPlaces(@RequestParam String lang) throws APIException {
         return ResponseEntity.ok(placeService.list(lang).stream().map(placeMapper::toRSDTO).toList());
     }
 
-    @GetMapping("/places/pageAll")
+    @GetMapping("/places/page")
     public ResponseEntity<?> pagePlaces(Pageable pageable, @RequestParam String lang) throws APIException {
         return ResponseEntity.ok(placeService.page(pageable, lang).getContent());
     }
 
-    @GetMapping("/places/list")
-    public ResponseEntity<?> listWorldPlaces(@RequestParam String id, @RequestParam String lang) throws APIException {
+    @GetMapping("/places/{id}/list")
+    public ResponseEntity<?> listWorldPlaces(@PathVariable String id, @RequestParam String lang) throws APIException {
         return ResponseEntity.ok(worldService.listPlaces(id, lang).stream().map(placeMapper::toRSDTO).toList());
     }
 }

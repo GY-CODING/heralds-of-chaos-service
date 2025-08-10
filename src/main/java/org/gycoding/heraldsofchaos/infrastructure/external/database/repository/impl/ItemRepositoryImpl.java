@@ -2,7 +2,7 @@ package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.
 
 import lombok.AllArgsConstructor;
 import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.FOTGAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.items.ItemMO;
 import org.gycoding.heraldsofchaos.domain.repository.ItemRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.ItemDatabaseMapper;
@@ -31,9 +31,9 @@ public class ItemRepositoryImpl implements ItemRepository {
     public ItemMO update(ItemMO item) throws APIException {
         final var persistedItem = repository.findByIdentifier(item.identifier()).orElseThrow(() ->
                 new APIException(
-                        FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
                 )
         );
 

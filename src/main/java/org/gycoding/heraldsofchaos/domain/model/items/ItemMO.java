@@ -9,5 +9,5 @@ public record ItemMO(
     TranslatedString name,
     TranslatedString description,
     String image,
-    ItemType type
+    TranslatedString type
 ) {}

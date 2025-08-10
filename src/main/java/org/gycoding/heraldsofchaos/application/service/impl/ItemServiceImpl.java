@@ -7,7 +7,7 @@ import org.gycoding.heraldsofchaos.application.dto.in.items.ItemIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.items.ItemODTO;
 import org.gycoding.heraldsofchaos.application.mapper.ItemServiceMapper;
 import org.gycoding.heraldsofchaos.application.service.ItemService;
-import org.gycoding.heraldsofchaos.domain.exceptions.FOTGAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.items.ItemMO;
 import org.gycoding.heraldsofchaos.domain.repository.ItemRepository;
@@ -31,15 +31,25 @@ public class ItemServiceImpl implements ItemService {
     public ItemODTO save(ItemIDTO item) throws APIException {
         final ItemMO savedItem;
 
+        if (repository.get(item.identifier()).isPresent()) {
+            Logger.error("Item already exists.", item.identifier());
+
+            throw new APIException(
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
+            );
+        }
+
         try {
             savedItem = repository.save(mapper.toMO(item));
         } catch(Exception e) {
             Logger.error(String.format("An error has occurred while saving an item: %s.", item.identifier()), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -58,9 +68,9 @@ public class ItemServiceImpl implements ItemService {
             Logger.error(String.format("An error has occurred while updating an item: %s.", item.identifier()), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -77,9 +87,9 @@ public class ItemServiceImpl implements ItemService {
             Logger.error(String.format("An error has occurred while removing an item: %s.", identifier), e.getMessage());
 
             throw new APIException(
-                    FOTGAPIError.CONFLICT.code,
-                    FOTGAPIError.CONFLICT.message,
-                    FOTGAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
             );
         }
 
@@ -90,9 +100,9 @@ public class ItemServiceImpl implements ItemService {
     public ItemODTO get(String identifier, String language) throws APIException {
         final var item = repository.get(identifier).orElseThrow(() ->
                 new APIException(
-                        FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                        FOTGAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
                 )
         );
 
@@ -107,9 +117,9 @@ public class ItemServiceImpl implements ItemService {
             return items.stream().map(item -> mapper.toODTO(item, language)).toList();
         } catch (NullPointerException e) {
             throw new APIException(
-                    FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
             );
         }
     }
@@ -122,9 +132,9 @@ public class ItemServiceImpl implements ItemService {
             return items.map(item -> mapper.toODTO(item, language).toMap());
         } catch (NullPointerException e) {
             throw new APIException(
-                    FOTGAPIError.RESOURCE_NOT_FOUND.code,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.message,
-                    FOTGAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
             );
         }
     }

@@ -1,5 +1,6 @@
 package org.gycoding.heraldsofchaos.infrastructure.api.controller.management;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.service.PlaceService;
@@ -24,12 +25,12 @@ public class WorldManagementController {
     private final PlaceControllerMapper placeMapper;
 
     @PostMapping("")
-    public ResponseEntity<?> save(@RequestBody WorldRQDTO world) throws APIException {
+    public ResponseEntity<?> save(@Valid @RequestBody WorldRQDTO world) throws APIException {
         return ResponseEntity.ok(worldMapper.toRSDTO(worldService.save(worldMapper.toIDTO(world))));
     }
 
     @PatchMapping("")
-    public ResponseEntity<?> update(@RequestBody WorldRQDTO world, @RequestParam String id) throws APIException {
+    public ResponseEntity<?> update(@Valid @RequestBody WorldRQDTO world, @RequestParam String id) throws APIException {
         return ResponseEntity.ok(worldMapper.toRSDTO(worldService.update(worldMapper.toIDTO(world, id))));
     }
 
@@ -41,12 +42,12 @@ public class WorldManagementController {
     }
 
     @PostMapping("/places")
-    public ResponseEntity<?> save(@RequestBody PlaceRQDTO place) throws APIException {
+    public ResponseEntity<?> save(@Valid @RequestBody PlaceRQDTO place) throws APIException {
         return ResponseEntity.ok(placeMapper.toRSDTO(placeService.save(placeMapper.toIDTO(place))));
     }
 
     @PatchMapping("/places")
-    public ResponseEntity<?> update(@RequestBody PlaceRQDTO place, @RequestParam String id) throws APIException {
+    public ResponseEntity<?> update(@Valid @RequestBody PlaceRQDTO place, @RequestParam String id) throws APIException {
         return ResponseEntity.ok(placeMapper.toRSDTO(placeService.update(placeMapper.toIDTO(place, id))));
     }
 

@@ -17,6 +17,7 @@ public interface CharacterDatabaseMapper {
     @Mapping(target = "image", source = "character.image")
     CharacterEntity toEntity(CharacterMO character, WorldEntity persistedWorld);
 
+    @Mapping(target = "mongoId", ignore = true)
     @Mapping(target = "world", source = "persistedWorld")
     @Mapping(target = "identifier", source = "character.identifier")
     @Mapping(target = "name", source = "character.name")

@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
-import org.gycoding.heraldsofchaos.domain.model.items.ItemType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,10 +17,10 @@ public class ItemEntity {
     public TranslatedString name;
     public TranslatedString description;
     public String image;
-    public ItemType type;
+    public TranslatedString type;
 
     @Builder
-    public ItemEntity(String mongoId, String identifier, TranslatedString name, TranslatedString description, String image, ItemType type) {
+    public ItemEntity(String mongoId, String identifier, TranslatedString name, TranslatedString description, String image, TranslatedString type) {
         this.mongoId = mongoId;
         this.identifier = identifier;
         this.name = name;
