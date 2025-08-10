@@ -32,6 +32,16 @@ public class WorldServiceImpl implements WorldService {
     public WorldODTO save(WorldIDTO world) throws APIException {
         final WorldMO savedWorld;
 
+        if (repository.get(world.identifier()).isPresent()) {
+            Logger.error("World already exists.", world.identifier());
+
+            throw new APIException(
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
+            );
+        }
+
         try {
             savedWorld = repository.save(mapper.toMO(world), world.places());
         } catch(Exception e) {

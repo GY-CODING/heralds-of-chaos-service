@@ -31,6 +31,16 @@ public class ItemServiceImpl implements ItemService {
     public ItemODTO save(ItemIDTO item) throws APIException {
         final ItemMO savedItem;
 
+        if (repository.get(item.identifier()).isPresent()) {
+            Logger.error("Item already exists.", item.identifier());
+
+            throw new APIException(
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
+            );
+        }
+
         try {
             savedItem = repository.save(mapper.toMO(item));
         } catch(Exception e) {

@@ -31,6 +31,16 @@ public class PlaceServiceImpl implements PlaceService {
     public PlaceODTO save(PlaceIDTO place) throws APIException {
         final PlaceMO savedPlace;
 
+        if (repository.get(place.identifier()).isPresent()) {
+            Logger.error("Place already exists.", place.identifier());
+
+            throw new APIException(
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
+            );
+        }
+
         try {
             savedPlace = repository.save(mapper.toMO(place));
         } catch(Exception e) {

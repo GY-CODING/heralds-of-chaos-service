@@ -31,6 +31,16 @@ public class CharacterServiceImpl implements CharacterService {
     public CharacterODTO save(CharacterIDTO character) throws APIException {
         final CharacterMO savedCharacter;
 
+        if (repository.get(character.identifier()).isPresent()) {
+            Logger.error("Character already exists.", character.identifier());
+
+            throw new APIException(
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
+            );
+        }
+
         try {
             savedCharacter = repository.save(mapper.toMO(character));
         } catch(Exception e) {

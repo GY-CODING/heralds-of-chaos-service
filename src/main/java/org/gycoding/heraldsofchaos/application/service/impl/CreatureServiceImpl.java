@@ -31,6 +31,16 @@ public class CreatureServiceImpl implements CreatureService {
     public CreatureODTO save(CreatureIDTO creature) throws APIException {
         final CreatureMO savedCreature;
 
+        if (repository.get(creature.identifier()).isPresent()) {
+            Logger.error("Creature already exists.", creature.identifier());
+
+            throw new APIException(
+                    HeraldsOfChaosAPIError.CONFLICT.code,
+                    HeraldsOfChaosAPIError.CONFLICT.message,
+                    HeraldsOfChaosAPIError.CONFLICT.status
+            );
+        }
+
         try {
             savedCreature = repository.save(mapper.toMO(creature));
         } catch(Exception e) {
