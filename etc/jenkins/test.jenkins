@@ -52,7 +52,7 @@ pipeline {
                       -Dsonar.host.url=https://sonar.gycoding.com \
                       -Dsonar.login=sqp_ebc14b6f4d176f54e63118308b30f64ac496da76 \
                       -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                      -Dsonar.coverage.exclusions=**/model/**,**/config/**,**/dto/**,**/entity/**,**/repository/**,**/exception/**,**/HeraldsOfChaosApplication.java
+                      -Dsonar.coverage.exclusions=**/shared/**,**/model/**,**/config/**,**/dto/**,**/entity/**,**/repository/**,**/exceptions/**,**/HeraldsOfChaosApplication.java
                 '''
             }
         }
