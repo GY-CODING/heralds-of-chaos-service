@@ -35,9 +35,9 @@ public class CreatureServiceImpl implements CreatureService {
             Logger.error("Creature already exists.", creature.identifier());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CREATURE_ALREADY_EXISTS_CONFLICT.code,
+                    HeraldsOfChaosAPIError.CREATURE_ALREADY_EXISTS_CONFLICT.message,
+                    HeraldsOfChaosAPIError.CREATURE_ALREADY_EXISTS_CONFLICT.status
             );
         }
 
@@ -47,9 +47,9 @@ public class CreatureServiceImpl implements CreatureService {
             Logger.error(String.format("An error has occurred while saving a creature: %s.", creature.identifier()), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CREATURE_SAVE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.CREATURE_SAVE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.CREATURE_SAVE_CONFLICT.status
             );
         }
 
@@ -68,9 +68,9 @@ public class CreatureServiceImpl implements CreatureService {
             Logger.error(String.format("An error has occurred while updating a creature: %s.", creature.identifier()), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CREATURE_UPDATE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.CREATURE_UPDATE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.CREATURE_UPDATE_CONFLICT.status
             );
         }
 
@@ -87,9 +87,9 @@ public class CreatureServiceImpl implements CreatureService {
             Logger.error(String.format("An error has occurred while removing a creature: %s.", identifier), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CREATURE_DELETE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.CREATURE_DELETE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.CREATURE_DELETE_CONFLICT.status
             );
         }
 
@@ -100,9 +100,9 @@ public class CreatureServiceImpl implements CreatureService {
     public CreatureODTO get(String identifier, String language) throws APIException {
         final var creature = repository.get(identifier).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.status
                 )
         );
 
@@ -117,9 +117,9 @@ public class CreatureServiceImpl implements CreatureService {
             return creatures.stream().map(creature -> mapper.toODTO(creature, language)).toList();
         } catch (NullPointerException e) {
             throw new APIException(
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.status
             );
         }
     }
@@ -132,9 +132,9 @@ public class CreatureServiceImpl implements CreatureService {
             return creatures.map(creature -> mapper.toODTO(creature, language).toMap());
         } catch (NullPointerException e) {
             throw new APIException(
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.status
             );
         }
     }

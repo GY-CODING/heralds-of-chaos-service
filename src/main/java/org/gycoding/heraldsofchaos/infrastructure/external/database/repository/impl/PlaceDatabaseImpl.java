@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class PlaceRepositoryImpl implements PlaceRepository {
+public class PlaceDatabaseImpl implements PlaceRepository {
     private final PlaceMongoRepository repository;
 
     private final PlaceDatabaseMapper mapper;
@@ -31,9 +31,9 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     public PlaceMO update(PlaceMO place) throws APIException {
         final var persistedPlace = repository.findByIdentifier(place.identifier()).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.status
                 )
         );
 

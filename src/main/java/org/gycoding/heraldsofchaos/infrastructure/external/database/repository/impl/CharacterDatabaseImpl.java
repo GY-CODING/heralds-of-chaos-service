@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class CharacterRepositoryImpl implements CharacterRepository {
+public class CharacterDatabaseImpl implements CharacterRepository {
     private final CharacterMongoRepository repository;
 
     private final CharacterDatabaseMapper mapper;
@@ -29,9 +29,9 @@ public class CharacterRepositoryImpl implements CharacterRepository {
     public CharacterMO save(CharacterMO character) throws APIException {
         final var persistedWorld = worldRepository.findByIdentifier(character.world()).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.status
                 )
         );
 
@@ -44,9 +44,9 @@ public class CharacterRepositoryImpl implements CharacterRepository {
     public CharacterMO update(CharacterMO character) throws APIException {
         final var persistedCharacter = repository.findByIdentifier(character.identifier()).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.status
                 )
         );
 

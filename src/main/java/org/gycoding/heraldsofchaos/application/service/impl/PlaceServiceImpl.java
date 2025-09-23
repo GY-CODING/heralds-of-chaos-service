@@ -35,9 +35,9 @@ public class PlaceServiceImpl implements PlaceService {
             Logger.error("Place already exists.", place.identifier());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.PLACE_ALREADY_EXISTS_CONFLICT.code,
+                    HeraldsOfChaosAPIError.PLACE_ALREADY_EXISTS_CONFLICT.message,
+                    HeraldsOfChaosAPIError.PLACE_ALREADY_EXISTS_CONFLICT.status
             );
         }
 
@@ -47,9 +47,9 @@ public class PlaceServiceImpl implements PlaceService {
             Logger.error(String.format("An error has occurred while saving a place: %s.", place.identifier()), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.PLACE_SAVE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.PLACE_SAVE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.PLACE_SAVE_CONFLICT.status
             );
         }
 
@@ -68,9 +68,9 @@ public class PlaceServiceImpl implements PlaceService {
             Logger.error(String.format("An error has occurred while updating a place: %s.", place.identifier()), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.PLACE_UPDATE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.PLACE_UPDATE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.PLACE_UPDATE_CONFLICT.status
             );
         }
 
@@ -87,9 +87,9 @@ public class PlaceServiceImpl implements PlaceService {
             Logger.error(String.format("An error has occurred while removing a place: %s.", identifier), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.PLACE_DELETE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.PLACE_DELETE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.PLACE_DELETE_CONFLICT.status
             );
         }
 
@@ -100,9 +100,9 @@ public class PlaceServiceImpl implements PlaceService {
     public PlaceODTO get(String identifier, String language) throws APIException {
         final var place = repository.get(identifier).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.status
                 )
         );
 
@@ -117,9 +117,9 @@ public class PlaceServiceImpl implements PlaceService {
             return places.stream().map(place -> mapper.toODTO(place, language)).toList();
         } catch (NullPointerException e) {
             throw new APIException(
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.status
             );
         }
     }
@@ -132,9 +132,9 @@ public class PlaceServiceImpl implements PlaceService {
             return places.map(place -> mapper.toODTO(place, language).toMap());
         } catch (NullPointerException e) {
             throw new APIException(
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.status
             );
         }
     }

@@ -36,9 +36,9 @@ public class WorldServiceImpl implements WorldService {
             Logger.error("World already exists.", world.identifier());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.WORLD_ALREADY_EXISTS_CONFLICT.code,
+                    HeraldsOfChaosAPIError.WORLD_ALREADY_EXISTS_CONFLICT.message,
+                    HeraldsOfChaosAPIError.WORLD_ALREADY_EXISTS_CONFLICT.status
             );
         }
 
@@ -48,9 +48,9 @@ public class WorldServiceImpl implements WorldService {
             Logger.error(String.format("An error has occurred while saving a world: %s.", world.identifier()), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.WORLD_SAVE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.WORLD_SAVE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.WORLD_SAVE_CONFLICT.status
             );
         }
 
@@ -69,9 +69,9 @@ public class WorldServiceImpl implements WorldService {
             Logger.error(String.format("An error has occurred while updating a world: %s.", world.identifier()), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.WORLD_UPDATE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.WORLD_UPDATE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.WORLD_UPDATE_CONFLICT.status
             );
         }
 
@@ -88,9 +88,9 @@ public class WorldServiceImpl implements WorldService {
             Logger.error(String.format("An error has occurred while removing a world: %s.", identifier), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.WORLD_DELETE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.WORLD_DELETE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.WORLD_DELETE_CONFLICT.status
             );
         }
 
@@ -101,9 +101,9 @@ public class WorldServiceImpl implements WorldService {
     public WorldODTO get(String identifier, String language) throws APIException {
         final var world = repository.get(identifier).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.status
                 )
         );
 
@@ -118,9 +118,9 @@ public class WorldServiceImpl implements WorldService {
             return worlds.stream().map(world -> mapper.toODTO(world, language)).toList();
         } catch (NullPointerException e) {
             throw new APIException(
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.status
             );
         }
     }
@@ -133,9 +133,9 @@ public class WorldServiceImpl implements WorldService {
             return worlds.map(world -> mapper.toODTO(world, language).toMap());
         } catch (NullPointerException e) {
             throw new APIException(
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.status
             );
         }
     }

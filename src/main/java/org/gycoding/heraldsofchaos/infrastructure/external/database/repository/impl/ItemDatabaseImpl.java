@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class ItemRepositoryImpl implements ItemRepository {
+public class ItemDatabaseImpl implements ItemRepository {
     private final ItemMongoRepository repository;
 
     private final ItemDatabaseMapper mapper;
@@ -31,9 +31,9 @@ public class ItemRepositoryImpl implements ItemRepository {
     public ItemMO update(ItemMO item) throws APIException {
         final var persistedItem = repository.findByIdentifier(item.identifier()).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.ITEM_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.ITEM_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.ITEM_NOT_FOUND.status
                 )
         );
 

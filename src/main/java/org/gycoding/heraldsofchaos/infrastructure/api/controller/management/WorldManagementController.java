@@ -52,7 +52,7 @@ public class WorldManagementController {
     }
 
     @DeleteMapping("/places")
-    public ResponseEntity<?> remove(@RequestParam String id) throws APIException {
+    public ResponseEntity<?> removePlace(@RequestParam String id) throws APIException {
         placeService.delete(id);
 
         return ResponseEntity.noContent().build();

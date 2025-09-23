@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class WorldRepositoryImpl implements WorldRepository {
+public class WorldDatabaseImpl implements WorldRepository {
     private final WorldMongoRepository repository;
 
     private final WorldDatabaseMapper mapper;
@@ -42,9 +42,9 @@ public class WorldRepositoryImpl implements WorldRepository {
     public WorldMO update(WorldMO world, List<String> places) throws APIException {
         final var persistedWorlds = repository.findByIdentifier(world.identifier()).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.status
                 )
         );
 

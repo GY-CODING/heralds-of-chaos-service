@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class CreatureRepositoryImpl implements CreatureRepository {
+public class CreatureDatabaseImpl implements CreatureRepository {
     private final CreatureMongoRepository repository;
 
     private final CreatureDatabaseMapper mapper;
@@ -31,9 +31,9 @@ public class CreatureRepositoryImpl implements CreatureRepository {
     public CreatureMO update(CreatureMO creature) throws APIException {
         final var persistedCreature = repository.findByIdentifier(creature.identifier()).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.status
                 )
         );
 

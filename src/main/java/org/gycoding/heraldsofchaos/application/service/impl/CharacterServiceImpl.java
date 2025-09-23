@@ -35,9 +35,9 @@ public class CharacterServiceImpl implements CharacterService {
             Logger.error("Character already exists.", character.identifier());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CHARACTER_ALREADY_EXISTS_CONFLICT.code,
+                    HeraldsOfChaosAPIError.CHARACTER_ALREADY_EXISTS_CONFLICT.message,
+                    HeraldsOfChaosAPIError.CHARACTER_ALREADY_EXISTS_CONFLICT.status
             );
         }
 
@@ -47,9 +47,9 @@ public class CharacterServiceImpl implements CharacterService {
             Logger.error(String.format("An error has occurred while saving a character: %s.", character.identifier()), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CHARACTER_SAVE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.CHARACTER_SAVE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.CHARACTER_SAVE_CONFLICT.status
             );
         }
 
@@ -68,9 +68,9 @@ public class CharacterServiceImpl implements CharacterService {
             Logger.error(String.format("An error has occurred while updating a character: %s.", character.identifier()), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CHARACTER_UPDATE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.CHARACTER_UPDATE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.CHARACTER_UPDATE_CONFLICT.status
             );
         }
 
@@ -87,9 +87,9 @@ public class CharacterServiceImpl implements CharacterService {
             Logger.error(String.format("An error has occurred while removing a character: %s.", identifier), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.CHARACTER_DELETE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.CHARACTER_DELETE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.CHARACTER_DELETE_CONFLICT.status
             );
         }
 
@@ -100,9 +100,9 @@ public class CharacterServiceImpl implements CharacterService {
     public CharacterODTO get(String identifier, String language) throws APIException {
         final var character = repository.get(identifier).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.status
                 )
         );
 
@@ -119,9 +119,9 @@ public class CharacterServiceImpl implements CharacterService {
                     .toList();
         } catch (NullPointerException e) {
             throw new APIException(
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.status
             );
         }
     }
@@ -134,9 +134,9 @@ public class CharacterServiceImpl implements CharacterService {
             return characters.map(character -> mapper.toODTO(character, language).toMap());
         } catch (NullPointerException e) {
             throw new APIException(
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.status
             );
         }
     }

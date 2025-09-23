@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="HeraldsOfChaosApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-    <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+    <configuration default="false" name="HeraldsOfChaosApplication" type="Application" factoryName="Application"
+                   activateToolWindowBeforeRun="false">
+        <option name="MAIN_CLASS_NAME" value="org.gycoding.heraldsofchaos.HeraldsOfChaosApplication"/>
     <module name="heralds-of-chaos" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="org.gycoding.heraldsofchaos.HeraldsOfChaosApplication" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

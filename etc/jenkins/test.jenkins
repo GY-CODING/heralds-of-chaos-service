@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+
+    environment {
+        GITHUB_USER = credentials('GITHUB_USER')
+        GITHUB_TOKEN = credentials('GITHUB_TOKEN')
+    }
+
+    stages {
+        stage('Install JDK') {
+            steps {
+                sh '''
+                    echo ">>> Downloading JDK 17..."
+                    curl -L -o jdk17.tar.gz https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.13%2B11/OpenJDK17U-jdk_x64_linux_hotspot_17.0.13_11.tar.gz
+                    mkdir -p .jdk
+                    tar -xzf jdk17.tar.gz -C .jdk --strip-components=1
+                    rm jdk17.tar.gz
+                    export JAVA_HOME=$PWD/.jdk
+                    export PATH=$JAVA_HOME/bin:$PATH
+                    java -version
+                '''
+            }
+        }
+
+        stage('Install Maven') {
+            steps {
+                sh '''
+                    echo ">>> Downloading Maven..."
+                    curl -L -o maven.tar.gz https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+                    mkdir -p .maven
+                    tar -xzf maven.tar.gz -C .maven --strip-components=1
+                    rm maven.tar.gz
+                    export JAVA_HOME=$PWD/.jdk
+                    export PATH=$JAVA_HOME/bin:$PWD/.maven/bin:$PATH
+                    mvn -v
+                '''
+            }
+        }
+
+        stage('Tests') {
+            steps {
+                sh '''
+                    export JAVA_HOME=$PWD/.jdk
+                    export PATH=$JAVA_HOME/bin:$PWD/.maven/bin:$PATH
+                    java -version
+                    mvn -v
+                    mvn clean test --settings src/main/resources/settings.xml
+                    mvn verify --settings src/main/resources/settings.xml
+                    ls -lR target/coverage-reports || true
+                    mvn sonar:sonar --settings src/main/resources/settings.xml \
+                      -Dsonar.projectKey=HOC \
+                      -Dsonar.host.url=https://sonar.gycoding.com \
+                      -Dsonar.login=sqp_e15c3039759830502652fe564b3cd935ff3d1cf1 \
+                      -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Tests passed!'
+        }
+        failure {
+            echo 'Some tests failed.'
+        }
+    }
+}

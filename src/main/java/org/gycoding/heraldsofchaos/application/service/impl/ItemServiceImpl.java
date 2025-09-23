@@ -35,9 +35,9 @@ public class ItemServiceImpl implements ItemService {
             Logger.error("Item already exists.", item.identifier());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.ITEM_ALREADY_EXISTS_CONFLICT.code,
+                    HeraldsOfChaosAPIError.ITEM_ALREADY_EXISTS_CONFLICT.message,
+                    HeraldsOfChaosAPIError.ITEM_ALREADY_EXISTS_CONFLICT.status
             );
         }
 
@@ -47,9 +47,9 @@ public class ItemServiceImpl implements ItemService {
             Logger.error(String.format("An error has occurred while saving an item: %s.", item.identifier()), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.ITEM_SAVE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.ITEM_SAVE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.ITEM_SAVE_CONFLICT.status
             );
         }
 
@@ -68,9 +68,9 @@ public class ItemServiceImpl implements ItemService {
             Logger.error(String.format("An error has occurred while updating an item: %s.", item.identifier()), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.ITEM_UPDATE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.ITEM_UPDATE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.ITEM_UPDATE_CONFLICT.status
             );
         }
 
@@ -87,9 +87,9 @@ public class ItemServiceImpl implements ItemService {
             Logger.error(String.format("An error has occurred while removing an item: %s.", identifier), e.getMessage());
 
             throw new APIException(
-                    HeraldsOfChaosAPIError.CONFLICT.code,
-                    HeraldsOfChaosAPIError.CONFLICT.message,
-                    HeraldsOfChaosAPIError.CONFLICT.status
+                    HeraldsOfChaosAPIError.ITEM_DELETE_CONFLICT.code,
+                    HeraldsOfChaosAPIError.ITEM_DELETE_CONFLICT.message,
+                    HeraldsOfChaosAPIError.ITEM_DELETE_CONFLICT.status
             );
         }
 
@@ -100,9 +100,9 @@ public class ItemServiceImpl implements ItemService {
     public ItemODTO get(String identifier, String language) throws APIException {
         final var item = repository.get(identifier).orElseThrow(() ->
                 new APIException(
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                        HeraldsOfChaosAPIError.ITEM_NOT_FOUND.code,
+                        HeraldsOfChaosAPIError.ITEM_NOT_FOUND.message,
+                        HeraldsOfChaosAPIError.ITEM_NOT_FOUND.status
                 )
         );
 
@@ -117,9 +117,9 @@ public class ItemServiceImpl implements ItemService {
             return items.stream().map(item -> mapper.toODTO(item, language)).toList();
         } catch (NullPointerException e) {
             throw new APIException(
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.status
             );
         }
     }
@@ -132,9 +132,9 @@ public class ItemServiceImpl implements ItemService {
             return items.map(item -> mapper.toODTO(item, language).toMap());
         } catch (NullPointerException e) {
             throw new APIException(
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.RESOURCE_NOT_FOUND.status
+                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.code,
+                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.message,
+                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.status
             );
         }
     }
