@@ -40,7 +40,7 @@ public class WorldDatabaseImpl implements WorldRepository {
 
     @Override
     public WorldMO update(WorldMO world, List<String> places) throws APIException {
-        final var persistedWorlds = repository.findByIdentifier(world.identifier()).orElseThrow(() ->
+        final var persistedWorld = repository.findByIdentifier(world.identifier()).orElseThrow(() ->
                 new APIException(
                         HeraldsOfChaosAPIError.WORLD_NOT_FOUND.code,
                         HeraldsOfChaosAPIError.WORLD_NOT_FOUND.message,
@@ -58,7 +58,7 @@ public class WorldDatabaseImpl implements WorldRepository {
 
         Logger.debug("Places searched (not specifically found) for world.", world.identifier());
 
-        return mapper.toMO(repository.save(mapper.toUpdatedEntity(persistedWorlds, world, persistedPlaces)));
+        return mapper.toMO(repository.save(mapper.toUpdatedEntity(persistedWorld, world, persistedPlaces)));
     }
 
     @Override

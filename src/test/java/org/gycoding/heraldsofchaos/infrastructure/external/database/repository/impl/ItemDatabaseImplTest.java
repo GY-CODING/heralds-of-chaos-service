@@ -1,0 +1,195 @@
+package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.impl;
+
+import org.gycoding.exceptions.model.APIException;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.model.items.ItemMO;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.ItemDatabaseMapper;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.model.items.ItemEntity;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.ItemMongoRepository;
+import org.gycoding.logs.logger.Logger;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+public class ItemDatabaseImplTest {
+    @Mock
+    private ItemMongoRepository repository;
+
+    @Mock
+    private ItemDatabaseMapper mapper;
+
+    @InjectMocks
+    private ItemDatabaseImpl database;
+
+    @BeforeAll
+    static void setup() {
+        try {
+            mockStatic(Logger.class);
+        } catch (Exception ignored) {
+        }
+    }
+
+    @Test
+    @DisplayName("[ITEM_DATABASE] - Test successful save of a Item.")
+    void testSaveItem() {
+        // When
+        final var itemMO = mock(ItemMO.class);
+        final var itemEntity = mock(ItemEntity.class);
+
+        when(mapper.toEntity(itemMO)).thenReturn(itemEntity);
+        when(repository.save(itemEntity)).thenReturn(itemEntity);
+        when(mapper.toMO(itemEntity)).thenReturn(itemMO);
+
+        // Then
+        final var result = database.save(itemMO);
+
+        // Verify
+        verify(mapper).toEntity(itemMO);
+        verify(repository).save(itemEntity);
+        verify(mapper).toMO(itemEntity);
+        verifyNoMoreInteractions(mapper, repository);
+
+        assertEquals(itemMO, result);
+    }
+
+    @Test
+    @DisplayName("[ITEM_DATABASE] - Test successful update of a Item.")
+    void testUpdateItem() throws APIException {
+        // When
+        final var itemMO = mock(ItemMO.class);
+        final var itemEntity = mock(ItemEntity.class);
+        final var itemUpdatedEntity = mock(ItemEntity.class);
+
+        when(repository.findByIdentifier(itemMO.identifier())).thenReturn(Optional.of(itemEntity));
+        when(mapper.toUpdatedEntity(itemEntity, itemMO)).thenReturn(itemUpdatedEntity);
+        when(repository.save(itemUpdatedEntity)).thenReturn(itemUpdatedEntity);
+        when(mapper.toMO(itemUpdatedEntity)).thenReturn(itemMO);
+
+        // Then
+        final var result = database.update(itemMO);
+
+        // Verify
+        verify(repository).findByIdentifier(itemMO.identifier());
+        verify(mapper).toUpdatedEntity(itemEntity, itemMO);
+        verify(repository).save(itemUpdatedEntity);
+        verify(mapper).toMO(itemUpdatedEntity);
+        verifyNoMoreInteractions(mapper, repository);
+
+        assertEquals(itemMO, result);
+    }
+
+    @Test
+    @DisplayName("[ITEM_DATABASE] - Test unsuccessful update of a Item due to its no existence.")
+    void testWrongUpdateItem() {
+        // When
+        final var itemMO = mock(ItemMO.class);
+        final var expectedException = new APIException(
+                HeraldsOfChaosAPIError.ITEM_NOT_FOUND.code,
+                HeraldsOfChaosAPIError.ITEM_NOT_FOUND.message,
+                HeraldsOfChaosAPIError.ITEM_NOT_FOUND.status
+        );
+
+        when(repository.findByIdentifier(itemMO.identifier())).thenReturn(Optional.empty());
+
+        // Then
+        final var error = assertThrows(
+                APIException.class,
+                () -> database.update(itemMO)
+        );
+
+        // Verify
+        verify(repository).findByIdentifier(itemMO.identifier());
+        verifyNoMoreInteractions(repository);
+
+        assertEquals(expectedException.getStatus(), error.getStatus());
+        assertEquals(expectedException.getCode(), error.getCode());
+    }
+
+    @Test
+    @DisplayName("[ITEM_DATABASE] - Test successful removal of a Item.")
+    void testDeleteItem() {
+        // When
+        final var id = "mock-item-identifier";
+
+        // Then
+        database.delete(id);
+
+        // Verify
+        verify(repository).removeByIdentifier(id);
+        verifyNoMoreInteractions(repository);
+    }
+
+    @Test
+    @DisplayName("[ITEM_DATABASE] - Test successful retrieval of a Item.")
+    void testGetItem() {
+        // When
+        final var id = "mock-item-identifier";
+        final var itemMO = mock(ItemMO.class);
+        final var itemEntity = mock(ItemEntity.class);
+
+        when(repository.findByIdentifier(id)).thenReturn(Optional.of(itemEntity));
+        when(mapper.toMO(itemEntity)).thenReturn(itemMO);
+
+        // Then
+        final var result = database.get(id);
+
+        // Verify
+        verify(repository).findByIdentifier(id);
+        verify(mapper).toMO(itemEntity);
+        verifyNoMoreInteractions(repository, mapper);
+
+        assertEquals(Optional.of(itemMO), result);
+    }
+
+    @Test
+    @DisplayName("[ITEM_DATABASE] - Test successful retrieval of a list of Items.")
+    void testListItem() {
+        // When
+        final var itemMO = mock(ItemMO.class);
+        final var itemEntity = mock(ItemEntity.class);
+
+        when(repository.findAll()).thenReturn(List.of(itemEntity));
+        when(mapper.toMO(itemEntity)).thenReturn(itemMO);
+
+        // Then
+        final var result = database.list();
+
+        // Verify
+        verify(repository).findAll();
+        verify(mapper).toMO(itemEntity);
+        verifyNoMoreInteractions(repository, mapper);
+
+        assertEquals(List.of(itemMO), result);
+    }
+
+    @Test
+    @DisplayName("[ITEM_DATABASE] - Test successful retrieval of a paginated list of Items.")
+    void testPageItem() {
+        // When
+        final Pageable pageable = Pageable.ofSize(10).withPage(0);
+        final Page pagedItems = mock(Page.class);
+
+        when(repository.findAll(pageable)).thenReturn(pagedItems);
+
+        // Then
+        final var result = database.page(pageable);
+
+        // Verify
+        verify(repository).findAll(pageable);
+        verifyNoMoreInteractions(repository);
+    }
+}
