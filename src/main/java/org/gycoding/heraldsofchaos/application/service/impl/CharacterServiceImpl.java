@@ -111,33 +111,17 @@ public class CharacterServiceImpl implements CharacterService {
 
     @Override
     public List<CharacterODTO> list(String language) throws APIException {
-        try {
-            final var characters = repository.list();
+        final var characters = repository.list();
 
-            return characters.stream()
-                    .map(character -> mapper.toODTO(character, language))
-                    .toList();
-        } catch (NullPointerException e) {
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.status
-            );
-        }
+        return characters.stream()
+                .map(character -> mapper.toODTO(character, language))
+                .toList();
     }
 
     @Override
     public Page<Map<String, Object>> page(Pageable pageable, String language) throws APIException {
-        try {
-            final var characters = repository.page(pageable);
+        final var characters = repository.page(pageable);
 
-            return characters.map(character -> mapper.toODTO(character, language).toMap());
-        } catch (NullPointerException e) {
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.CHARACTER_LIST_NOT_FOUND.status
-            );
-        }
+        return characters.map(character -> mapper.toODTO(character, language).toMap());
     }
 }

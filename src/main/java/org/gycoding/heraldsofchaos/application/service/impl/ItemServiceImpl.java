@@ -111,31 +111,15 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemODTO> list(String language) throws APIException {
-        try {
-            final var items = repository.list();
+        final var items = repository.list();
 
-            return items.stream().map(item -> mapper.toODTO(item, language)).toList();
-        } catch (NullPointerException e) {
-            throw new APIException(
-                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.status
-            );
-        }
+        return items.stream().map(item -> mapper.toODTO(item, language)).toList();
     }
 
     @Override
     public Page<Map<String, Object>> page(Pageable pageable, String language) throws APIException {
-        try {
-            final var items = repository.page(pageable);
+        final var items = repository.page(pageable);
 
-            return items.map(item -> mapper.toODTO(item, language).toMap());
-        } catch (NullPointerException e) {
-            throw new APIException(
-                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.ITEM_LIST_NOT_FOUND.status
-            );
-        }
+        return items.map(item -> mapper.toODTO(item, language).toMap());
     }
 }

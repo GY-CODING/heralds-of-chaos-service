@@ -157,7 +157,7 @@ public class CreatureDatabaseImplTest {
 
     @Test
     @DisplayName("[CREATURE_DATABASE] - Test successful retrieval of a list of Creatures.")
-    void testListCreature() {
+    void testListCreatures() {
         // When
         final var creatureMO = mock(CreatureMO.class);
         final var creatureEntity = mock(CreatureEntity.class);
@@ -178,7 +178,7 @@ public class CreatureDatabaseImplTest {
 
     @Test
     @DisplayName("[CREATURE_DATABASE] - Test successful retrieval of a paginated list of Creatures.")
-    void testPageCreature() {
+    void testPageCreatures() {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page pagedCreatures = mock(Page.class);

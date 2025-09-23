@@ -195,7 +195,7 @@ public class CharacterDatabaseImplTest {
 
     @Test
     @DisplayName("[CHARACTER_DATABASE] - Test successful retrieval of a list of Characters.")
-    void testListCharacter() {
+    void testListCharacters() {
         // When
         final var characterMO = mock(CharacterMO.class);
         final var characterEntity = mock(CharacterEntity.class);
@@ -216,7 +216,7 @@ public class CharacterDatabaseImplTest {
 
     @Test
     @DisplayName("[CHARACTER_DATABASE] - Test successful retrieval of a paginated list of Characters.")
-    void testPageCharacter() {
+    void testPageCharacters() {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page pagedCharacters = mock(Page.class);

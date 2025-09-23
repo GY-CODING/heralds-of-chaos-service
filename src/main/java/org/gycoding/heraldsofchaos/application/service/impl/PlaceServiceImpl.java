@@ -111,31 +111,15 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public List<PlaceODTO> list(String language) throws APIException {
-        try {
-            final var places = repository.list();
+        final var places = repository.list();
 
-            return places.stream().map(place -> mapper.toODTO(place, language)).toList();
-        } catch (NullPointerException e) {
-            throw new APIException(
-                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.status
-            );
-        }
+        return places.stream().map(place -> mapper.toODTO(place, language)).toList();
     }
 
     @Override
     public Page<Map<String, Object>> page(Pageable pageable, String language) throws APIException {
-        try {
-            final var places = repository.page(pageable);
+        final var places = repository.page(pageable);
 
-            return places.map(place -> mapper.toODTO(place, language).toMap());
-        } catch (NullPointerException e) {
-            throw new APIException(
-                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.PLACE_LIST_NOT_FOUND.status
-            );
-        }
+        return places.map(place -> mapper.toODTO(place, language).toMap());
     }
 }

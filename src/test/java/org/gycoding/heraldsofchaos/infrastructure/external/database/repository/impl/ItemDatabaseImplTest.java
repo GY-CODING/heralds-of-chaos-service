@@ -157,7 +157,7 @@ public class ItemDatabaseImplTest {
 
     @Test
     @DisplayName("[ITEM_DATABASE] - Test successful retrieval of a list of Items.")
-    void testListItem() {
+    void testListItems() {
         // When
         final var itemMO = mock(ItemMO.class);
         final var itemEntity = mock(ItemEntity.class);
@@ -178,7 +178,7 @@ public class ItemDatabaseImplTest {
 
     @Test
     @DisplayName("[ITEM_DATABASE] - Test successful retrieval of a paginated list of Items.")
-    void testPageItem() {
+    void testPageItems() {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page pagedItems = mock(Page.class);

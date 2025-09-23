@@ -111,31 +111,15 @@ public class CreatureServiceImpl implements CreatureService {
 
     @Override
     public List<CreatureODTO> list(String language) throws APIException {
-        try {
-            final var creatures = repository.list();
+        final var creatures = repository.list();
 
-            return creatures.stream().map(creature -> mapper.toODTO(creature, language)).toList();
-        } catch (NullPointerException e) {
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.status
-            );
-        }
+        return creatures.stream().map(creature -> mapper.toODTO(creature, language)).toList();
     }
 
     @Override
     public Page<Map<String, Object>> page(Pageable pageable, String language) throws APIException {
-        try {
-            final var creatures = repository.page(pageable);
+        final var creatures = repository.page(pageable);
 
-            return creatures.map(creature -> mapper.toODTO(creature, language).toMap());
-        } catch (NullPointerException e) {
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.CREATURE_LIST_NOT_FOUND.status
-            );
-        }
+        return creatures.map(creature -> mapper.toODTO(creature, language).toMap());
     }
 }

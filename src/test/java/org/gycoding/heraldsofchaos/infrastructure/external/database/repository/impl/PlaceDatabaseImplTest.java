@@ -157,7 +157,7 @@ public class PlaceDatabaseImplTest {
 
     @Test
     @DisplayName("[PLACE_DATABASE] - Test successful retrieval of a list of Places.")
-    void testListPlace() {
+    void testListPlaces() {
         // When
         final var placeMO = mock(PlaceMO.class);
         final var placeEntity = mock(PlaceEntity.class);
@@ -178,7 +178,7 @@ public class PlaceDatabaseImplTest {
 
     @Test
     @DisplayName("[PLACE_DATABASE] - Test successful retrieval of a paginated list of Places.")
-    void testPagePlace() {
+    void testPagePlaces() {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page pagedPlaces = mock(Page.class);

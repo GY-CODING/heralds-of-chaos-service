@@ -112,32 +112,16 @@ public class WorldServiceImpl implements WorldService {
 
     @Override
     public List<WorldODTO> list(String language) throws APIException {
-        try {
-            final var worlds = repository.list();
+        final var worlds = repository.list();
 
-            return worlds.stream().map(world -> mapper.toODTO(world, language)).toList();
-        } catch (NullPointerException e) {
-            throw new APIException(
-                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.status
-            );
-        }
+        return worlds.stream().map(world -> mapper.toODTO(world, language)).toList();
     }
 
     @Override
     public Page<Map<String, Object>> page(Pageable pageable, String language) throws APIException {
-        try {
-            final var worlds = repository.page(pageable);
+        final var worlds = repository.page(pageable);
 
-            return worlds.map(world -> mapper.toODTO(world, language).toMap());
-        } catch (NullPointerException e) {
-            throw new APIException(
-                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.code,
-                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.message,
-                    HeraldsOfChaosAPIError.WORLD_LIST_NOT_FOUND.status
-            );
-        }
+        return worlds.map(world -> mapper.toODTO(world, language).toMap());
     }
 
     @Override

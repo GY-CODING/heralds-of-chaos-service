@@ -171,7 +171,7 @@ public class WorldDatabaseImplTest {
 
     @Test
     @DisplayName("[WORLD_DATABASE] - Test successful retrieval of a list of Worlds.")
-    void testListWorld() {
+    void testListWorlds() {
         // When
         final var worldMO = mock(WorldMO.class);
         final var worldEntity = mock(WorldEntity.class);
@@ -192,7 +192,7 @@ public class WorldDatabaseImplTest {
 
     @Test
     @DisplayName("[WORLD_DATABASE] - Test successful retrieval of a paginated list of Worlds.")
-    void testPageWorld() {
+    void testPageWorlds() {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page pagedWorlds = mock(Page.class);
