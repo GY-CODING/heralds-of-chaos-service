@@ -3,6 +3,7 @@ package org.gycoding.heraldsofchaos.infrastructure.api.controller.data;
 import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.out.items.ItemODTO;
 import org.gycoding.heraldsofchaos.application.service.ItemService;
+import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.items.ItemRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.ItemControllerMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -39,16 +40,15 @@ public class ItemDataControllerTest {
         final var itemODTO = mock(ItemODTO.class);
         final var itemRSDTO = mock(ItemRSDTO.class);
         final var id = "mock-item-id";
-        final var lang = "en";
 
-        when(service.get(id, lang)).thenReturn(itemODTO);
+        when(service.get(id, TranslatedString.EN)).thenReturn(itemODTO);
         when(mapper.toRSDTO(itemODTO)).thenReturn(itemRSDTO);
 
         // Then
-        final var result = controller.getItem(id, lang);
+        final var result = controller.getItem(id, TranslatedString.EN);
 
         // Verify
-        verify(service).get(id, lang);
+        verify(service).get(id, TranslatedString.EN);
         verify(mapper).toRSDTO(itemODTO);
         verifyNoMoreInteractions(mapper, service);
 
@@ -61,16 +61,15 @@ public class ItemDataControllerTest {
         // When
         final var itemODTO = mock(ItemODTO.class);
         final var itemRSDTO = mock(ItemRSDTO.class);
-        final var lang = "en";
 
-        when(service.list(lang)).thenReturn(List.of(itemODTO));
+        when(service.list(TranslatedString.EN)).thenReturn(List.of(itemODTO));
         when(mapper.toRSDTO(itemODTO)).thenReturn(itemRSDTO);
 
         // Then
-        final var result = controller.listItems(lang);
+        final var result = controller.listItems(TranslatedString.EN);
 
         // Verify
-        verify(service).list(lang);
+        verify(service).list(TranslatedString.EN);
         verify(mapper).toRSDTO(itemODTO);
         verifyNoMoreInteractions(mapper, service);
 
@@ -81,19 +80,18 @@ public class ItemDataControllerTest {
     @DisplayName("[ITEM_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Items.")
     void testPageItems() throws APIException {
         // When
-        final var lang = "en";
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedItems = mock(Page.class);
         final Map<String, Object> itemMap = Map.of("id", "mock-id", "name", "mock-name");
 
-        when(service.page(pageable, lang)).thenReturn(pagedItems);
+        when(service.page(pageable, TranslatedString.EN)).thenReturn(pagedItems);
         when(pagedItems.getContent()).thenReturn(List.of(itemMap));
 
         // Then
-        final var result = controller.pageItems(pageable, lang);
+        final var result = controller.pageItems(pageable, TranslatedString.EN);
 
         // Verify
-        verify(service).page(pageable, lang);
+        verify(service).page(pageable, TranslatedString.EN);
         verifyNoMoreInteractions(service);
 
         assertNotEquals(List.of(), result.getBody());

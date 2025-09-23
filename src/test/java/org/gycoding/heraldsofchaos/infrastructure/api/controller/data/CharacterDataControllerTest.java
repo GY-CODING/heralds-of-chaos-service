@@ -3,6 +3,7 @@ package org.gycoding.heraldsofchaos.infrastructure.api.controller.data;
 import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.out.characters.CharacterODTO;
 import org.gycoding.heraldsofchaos.application.service.CharacterService;
+import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.characters.CharacterRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.CharacterControllerMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -39,16 +40,15 @@ public class CharacterDataControllerTest {
         final var characterODTO = mock(CharacterODTO.class);
         final var characterRSDTO = mock(CharacterRSDTO.class);
         final var id = "mock-character-id";
-        final var lang = "en";
 
-        when(service.get(id, lang)).thenReturn(characterODTO);
+        when(service.get(id, TranslatedString.EN)).thenReturn(characterODTO);
         when(mapper.toRSDTO(characterODTO)).thenReturn(characterRSDTO);
 
         // Then
-        final var result = controller.getCharacter(id, lang);
+        final var result = controller.getCharacter(id, TranslatedString.EN);
 
         // Verify
-        verify(service).get(id, lang);
+        verify(service).get(id, TranslatedString.EN);
         verify(mapper).toRSDTO(characterODTO);
         verifyNoMoreInteractions(mapper, service);
 
@@ -61,16 +61,15 @@ public class CharacterDataControllerTest {
         // When
         final var characterODTO = mock(CharacterODTO.class);
         final var characterRSDTO = mock(CharacterRSDTO.class);
-        final var lang = "en";
 
-        when(service.list(lang)).thenReturn(List.of(characterODTO));
+        when(service.list(TranslatedString.EN)).thenReturn(List.of(characterODTO));
         when(mapper.toRSDTO(characterODTO)).thenReturn(characterRSDTO);
 
         // Then
-        final var result = controller.listCharacters(lang);
+        final var result = controller.listCharacters(TranslatedString.EN);
 
         // Verify
-        verify(service).list(lang);
+        verify(service).list(TranslatedString.EN);
         verify(mapper).toRSDTO(characterODTO);
         verifyNoMoreInteractions(mapper, service);
 
@@ -81,19 +80,18 @@ public class CharacterDataControllerTest {
     @DisplayName("[CHARACTER_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Characters.")
     void testPageCharacters() throws APIException {
         // When
-        final var lang = "en";
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedCharacters = mock(Page.class);
         final Map<String, Object> characterMap = Map.of("id", "mock-id", "name", "mock-name");
 
-        when(service.page(pageable, lang)).thenReturn(pagedCharacters);
+        when(service.page(pageable, TranslatedString.EN)).thenReturn(pagedCharacters);
         when(pagedCharacters.getContent()).thenReturn(List.of(characterMap));
 
         // Then
-        final var result = controller.pageCharacters(pageable, lang);
+        final var result = controller.pageCharacters(pageable, TranslatedString.EN);
 
         // Verify
-        verify(service).page(pageable, lang);
+        verify(service).page(pageable, TranslatedString.EN);
         verifyNoMoreInteractions(service);
 
         assertNotEquals(List.of(), result.getBody());

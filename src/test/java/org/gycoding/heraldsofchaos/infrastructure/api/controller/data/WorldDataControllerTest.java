@@ -5,6 +5,7 @@ import org.gycoding.heraldsofchaos.application.dto.out.worlds.PlaceODTO;
 import org.gycoding.heraldsofchaos.application.dto.out.worlds.WorldODTO;
 import org.gycoding.heraldsofchaos.application.service.PlaceService;
 import org.gycoding.heraldsofchaos.application.service.WorldService;
+import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.worlds.PlaceRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.worlds.WorldRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.PlaceControllerMapper;
@@ -49,16 +50,15 @@ public class WorldDataControllerTest {
         final var worldODTO = mock(WorldODTO.class);
         final var worldRSDTO = mock(WorldRSDTO.class);
         final var id = "mock-world-id";
-        final var lang = "en";
 
-        when(worldService.get(id, lang)).thenReturn(worldODTO);
+        when(worldService.get(id, TranslatedString.EN)).thenReturn(worldODTO);
         when(worldMapper.toRSDTO(worldODTO)).thenReturn(worldRSDTO);
 
         // Then
-        final var result = controller.getWorld(id, lang);
+        final var result = controller.getWorld(id, TranslatedString.EN);
 
         // Verify
-        verify(worldService).get(id, lang);
+        verify(worldService).get(id, TranslatedString.EN);
         verify(worldMapper).toRSDTO(worldODTO);
         verifyNoMoreInteractions(worldMapper, worldService);
 
@@ -71,16 +71,15 @@ public class WorldDataControllerTest {
         // When
         final var worldODTO = mock(WorldODTO.class);
         final var worldRSDTO = mock(WorldRSDTO.class);
-        final var lang = "en";
 
-        when(worldService.list(lang)).thenReturn(List.of(worldODTO));
+        when(worldService.list(TranslatedString.EN)).thenReturn(List.of(worldODTO));
         when(worldMapper.toRSDTO(worldODTO)).thenReturn(worldRSDTO);
 
         // Then
-        final var result = controller.listWorlds(lang);
+        final var result = controller.listWorlds(TranslatedString.EN);
 
         // Verify
-        verify(worldService).list(lang);
+        verify(worldService).list(TranslatedString.EN);
         verify(worldMapper).toRSDTO(worldODTO);
         verifyNoMoreInteractions(worldMapper, worldService);
 
@@ -91,19 +90,18 @@ public class WorldDataControllerTest {
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Worlds.")
     void testPageWorld() throws APIException {
         // When
-        final var lang = "en";
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedWorlds = mock(Page.class);
         final Map<String, Object> worldMap = Map.of("id", "mock-id", "name", "mock-name");
 
-        when(worldService.page(pageable, lang)).thenReturn(pagedWorlds);
+        when(worldService.page(pageable, TranslatedString.EN)).thenReturn(pagedWorlds);
         when(pagedWorlds.getContent()).thenReturn(List.of(worldMap));
 
         // Then
-        final var result = controller.pageWorlds(pageable, lang);
+        final var result = controller.pageWorlds(pageable, TranslatedString.EN);
 
         // Verify
-        verify(worldService).page(pageable, lang);
+        verify(worldService).page(pageable, TranslatedString.EN);
         verifyNoMoreInteractions(worldService);
 
         assertNotEquals(List.of(), result.getBody());
@@ -116,16 +114,15 @@ public class WorldDataControllerTest {
         final var placeODTO = mock(PlaceODTO.class);
         final var placeRSDTO = mock(PlaceRSDTO.class);
         final var id = "mock-place-id";
-        final var lang = "en";
 
-        when(placeService.get(id, lang)).thenReturn(placeODTO);
+        when(placeService.get(id, TranslatedString.EN)).thenReturn(placeODTO);
         when(placeMapper.toRSDTO(placeODTO)).thenReturn(placeRSDTO);
 
         // Then
-        final var result = controller.getPlace(id, lang);
+        final var result = controller.getPlace(id, TranslatedString.EN);
 
         // Verify
-        verify(placeService).get(id, lang);
+        verify(placeService).get(id, TranslatedString.EN);
         verify(placeMapper).toRSDTO(placeODTO);
         verifyNoMoreInteractions(placeMapper, placeService);
 
@@ -138,16 +135,15 @@ public class WorldDataControllerTest {
         // When
         final var placeODTO = mock(PlaceODTO.class);
         final var placeRSDTO = mock(PlaceRSDTO.class);
-        final var lang = "en";
 
-        when(placeService.list(lang)).thenReturn(List.of(placeODTO));
+        when(placeService.list(TranslatedString.EN)).thenReturn(List.of(placeODTO));
         when(placeMapper.toRSDTO(placeODTO)).thenReturn(placeRSDTO);
 
         // Then
-        final var result = controller.listPlaces(lang);
+        final var result = controller.listPlaces(TranslatedString.EN);
 
         // Verify
-        verify(placeService).list(lang);
+        verify(placeService).list(TranslatedString.EN);
         verify(placeMapper).toRSDTO(placeODTO);
         verifyNoMoreInteractions(placeMapper, placeService);
 
@@ -158,20 +154,41 @@ public class WorldDataControllerTest {
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Places.")
     void testPagePlaces() throws APIException {
         // When
-        final var lang = "en";
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedPlaces = mock(Page.class);
         final Map<String, Object> placeMap = Map.of("id", "mock-id", "name", "mock-name");
 
-        when(placeService.page(pageable, lang)).thenReturn(pagedPlaces);
+        when(placeService.page(pageable, TranslatedString.EN)).thenReturn(pagedPlaces);
         when(pagedPlaces.getContent()).thenReturn(List.of(placeMap));
 
         // Then
-        final var result = controller.pagePlaces(pageable, lang);
+        final var result = controller.pagePlaces(pageable, TranslatedString.EN);
 
         // Verify
-        verify(placeService).page(pageable, lang);
+        verify(placeService).page(pageable, TranslatedString.EN);
         verifyNoMoreInteractions(placeService);
+
+        assertNotEquals(List.of(), result.getBody());
+    }
+
+    @Test
+    @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a list of Places inside an specified World.")
+    void testListWorldPlaces() throws APIException {
+        // When
+        final var placeODTO = mock(PlaceODTO.class);
+        final var placeRSDTO = mock(PlaceRSDTO.class);
+        final var id = "mock-world-id";
+
+        when(worldService.listPlaces(id, TranslatedString.EN)).thenReturn(List.of(placeODTO));
+        when(placeMapper.toRSDTO(placeODTO)).thenReturn(placeRSDTO);
+
+        // Then
+        final var result = controller.listWorldPlaces(id, TranslatedString.EN);
+
+        // Verify
+        verify(worldService).listPlaces(id, TranslatedString.EN);
+        verify(placeMapper).toRSDTO(placeODTO);
+        verifyNoMoreInteractions(placeMapper, worldService);
 
         assertNotEquals(List.of(), result.getBody());
     }

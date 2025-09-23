@@ -3,6 +3,7 @@ package org.gycoding.heraldsofchaos.infrastructure.api.controller.data;
 import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.out.creatures.CreatureODTO;
 import org.gycoding.heraldsofchaos.application.service.CreatureService;
+import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.creatures.CreatureRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.CreatureControllerMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -39,16 +40,15 @@ public class CreatureDataControllerTest {
         final var creatureODTO = mock(CreatureODTO.class);
         final var creatureRSDTO = mock(CreatureRSDTO.class);
         final var id = "mock-creature-id";
-        final var lang = "en";
 
-        when(service.get(id, lang)).thenReturn(creatureODTO);
+        when(service.get(id, TranslatedString.EN)).thenReturn(creatureODTO);
         when(mapper.toRSDTO(creatureODTO)).thenReturn(creatureRSDTO);
 
         // Then
-        final var result = controller.getCreature(id, lang);
+        final var result = controller.getCreature(id, TranslatedString.EN);
 
         // Verify
-        verify(service).get(id, lang);
+        verify(service).get(id, TranslatedString.EN);
         verify(mapper).toRSDTO(creatureODTO);
         verifyNoMoreInteractions(mapper, service);
 
@@ -61,16 +61,15 @@ public class CreatureDataControllerTest {
         // When
         final var creatureODTO = mock(CreatureODTO.class);
         final var creatureRSDTO = mock(CreatureRSDTO.class);
-        final var lang = "en";
 
-        when(service.list(lang)).thenReturn(List.of(creatureODTO));
+        when(service.list(TranslatedString.EN)).thenReturn(List.of(creatureODTO));
         when(mapper.toRSDTO(creatureODTO)).thenReturn(creatureRSDTO);
 
         // Then
-        final var result = controller.listCreatures(lang);
+        final var result = controller.listCreatures(TranslatedString.EN);
 
         // Verify
-        verify(service).list(lang);
+        verify(service).list(TranslatedString.EN);
         verify(mapper).toRSDTO(creatureODTO);
         verifyNoMoreInteractions(mapper, service);
 
@@ -81,19 +80,18 @@ public class CreatureDataControllerTest {
     @DisplayName("[CREATURE_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Creatures.")
     void testPageCreatures() throws APIException {
         // When
-        final var lang = "en";
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedCreatures = mock(Page.class);
         final Map<String, Object> creatureMap = Map.of("id", "mock-id", "name", "mock-name");
 
-        when(service.page(pageable, lang)).thenReturn(pagedCreatures);
+        when(service.page(pageable, TranslatedString.EN)).thenReturn(pagedCreatures);
         when(pagedCreatures.getContent()).thenReturn(List.of(creatureMap));
 
         // Then
-        final var result = controller.pageCreatures(pageable, lang);
+        final var result = controller.pageCreatures(pageable, TranslatedString.EN);
 
         // Verify
-        verify(service).page(pageable, lang);
+        verify(service).page(pageable, TranslatedString.EN);
         verifyNoMoreInteractions(service);
 
         assertNotEquals(List.of(), result.getBody());
