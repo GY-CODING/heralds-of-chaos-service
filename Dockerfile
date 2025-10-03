@@ -1,5 +1,7 @@
 # Use a base image with Java and Maven installed
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM eclipse-temurin:23-jdk AS build
+
+RUN apt-get update && apt-get install -y maven
 
 # Set the working directory
 WORKDIR /app
@@ -37,7 +39,7 @@ COPY src ./src
 RUN mvn package -DskipTests
 
 # Use a lightweight base image with Java installed
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:23-jdk
 
 # Set the working directory
 WORKDIR /app
