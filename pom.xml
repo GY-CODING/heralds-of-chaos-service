@@ -17,9 +17,9 @@
     <properties>
         <java.version>23</java.version>
 
-        <jacoco.version>0.8.11</jacoco.version>
-        <maven-surefire.version>3.1.2</maven-surefire.version>
-        <maven-compiler.version>3.8.1</maven-compiler.version>
+        <jacoco.version>0.8.13</jacoco.version>
+        <maven-surefire.version>3.5.4</maven-surefire.version>
+        <maven-compiler.version>3.14.0</maven-compiler.version>
 
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.32</lombok.version>
