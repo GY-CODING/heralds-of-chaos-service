@@ -10,6 +10,7 @@ public interface CharacterDatabaseMapper {
     @Mapping(target = "world", source = "world.identifier")
     CharacterMO toMO(CharacterEntity character);
 
+    @Mapping(target = "mongoId", ignore = true)
     @Mapping(target = "world", source = "persistedWorld")
     @Mapping(target = "identifier", source = "character.identifier")
     @Mapping(target = "name", source = "character.name")
