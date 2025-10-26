@@ -4,7 +4,9 @@ import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.worlds.PlaceMO;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.PlaceDatabaseMapper;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.model.OrderEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.worlds.PlaceEntity;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.PlaceMongoRepository;
 import org.gycoding.logs.logger.Logger;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,6 +28,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceDatabaseImplTest {
+    @Mock
+    private OrderMongoRepository orderRepository;
+
     @Mock
     private PlaceMongoRepository repository;
 
@@ -159,9 +164,11 @@ public class PlaceDatabaseImplTest {
     @DisplayName("[PLACE_DATABASE] - Test successful retrieval of a list of Places.")
     void testListPlaces() {
         // When
+        final var orderEntity = mock(OrderEntity.class);
         final var placeMO = mock(PlaceMO.class);
         final var placeEntity = mock(PlaceEntity.class);
 
+        when(orderRepository.findByCollection("Place")).thenReturn(Optional.of(orderEntity));
         when(repository.findAll()).thenReturn(List.of(placeEntity));
         when(mapper.toMO(placeEntity)).thenReturn(placeMO);
 
@@ -169,9 +176,10 @@ public class PlaceDatabaseImplTest {
         final var result = database.list();
 
         // Verify
+        verify(orderRepository).findByCollection("Place");
         verify(repository).findAll();
         verify(mapper).toMO(placeEntity);
-        verifyNoMoreInteractions(repository, mapper);
+        verifyNoMoreInteractions(orderRepository, repository, mapper);
 
         assertEquals(List.of(placeMO), result);
     }

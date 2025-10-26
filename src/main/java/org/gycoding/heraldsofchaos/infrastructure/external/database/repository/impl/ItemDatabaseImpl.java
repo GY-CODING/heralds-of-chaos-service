@@ -7,19 +7,21 @@ import org.gycoding.heraldsofchaos.domain.model.items.ItemMO;
 import org.gycoding.heraldsofchaos.domain.repository.ItemRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.ItemDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.ItemMongoRepository;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.logs.logger.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class ItemDatabaseImpl implements ItemRepository {
+    private final OrderMongoRepository orderRepository;
     private final ItemMongoRepository repository;
-
     private final ItemDatabaseMapper mapper;
 
     @Override
@@ -55,8 +57,13 @@ public class ItemDatabaseImpl implements ItemRepository {
 
     @Override
     public List<ItemMO> list() {
+        final var order = orderRepository.findByCollection("Item")
+                .orElse(null)
+                .getOrder();
+
         return repository.findAll().stream()
                 .map(mapper::toMO)
+                .sorted(Comparator.comparingInt(item -> order.indexOf(item.identifier())))
                 .toList();
     }
 

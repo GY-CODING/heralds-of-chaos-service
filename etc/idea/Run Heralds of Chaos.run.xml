@@ -1,5 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="Run Heralds of Chaos" type="Application" factoryName="Application">
+    <configuration default="false" name="Run Heralds of Chaos" type="Application" factoryName="Application"
+                   activateToolWindowBeforeRun="false">
+        <option name="envFilePaths">
+            <option value="$PROJECT_DIR$/.env"/>
+        </option>
         <option name="MAIN_CLASS_NAME" value="org.gycoding.heraldsofchaos.HeraldsOfChaosApplication"/>
         <module name="heralds-of-chaos"/>
         <method v="2">

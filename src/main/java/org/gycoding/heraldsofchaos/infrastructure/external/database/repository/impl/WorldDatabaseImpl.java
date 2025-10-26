@@ -6,6 +6,7 @@ import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.worlds.WorldMO;
 import org.gycoding.heraldsofchaos.domain.repository.WorldRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.WorldDatabaseMapper;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.PlaceMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.WorldMongoRepository;
 import org.gycoding.logs.logger.Logger;
@@ -13,16 +14,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class WorldDatabaseImpl implements WorldRepository {
+    private final OrderMongoRepository orderRepository;
     private final WorldMongoRepository repository;
-
     private final WorldDatabaseMapper mapper;
-
     private final PlaceMongoRepository placeRepository;
 
     @Override
@@ -74,8 +75,13 @@ public class WorldDatabaseImpl implements WorldRepository {
 
     @Override
     public List<WorldMO> list() {
+        final var order = orderRepository.findByCollection("World")
+                .orElse(null)
+                .getOrder();
+
         return repository.findAll().stream()
                 .map(mapper::toMO)
+                .sorted(Comparator.comparingInt(character -> order.indexOf(character.identifier())))
                 .toList();
     }
 

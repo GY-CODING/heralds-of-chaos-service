@@ -7,19 +7,21 @@ import org.gycoding.heraldsofchaos.domain.model.creatures.CreatureMO;
 import org.gycoding.heraldsofchaos.domain.repository.CreatureRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.CreatureDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.CreatureMongoRepository;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.logs.logger.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class CreatureDatabaseImpl implements CreatureRepository {
+    private final OrderMongoRepository orderRepository;
     private final CreatureMongoRepository repository;
-
     private final CreatureDatabaseMapper mapper;
 
     @Override
@@ -55,8 +57,13 @@ public class CreatureDatabaseImpl implements CreatureRepository {
 
     @Override
     public List<CreatureMO> list() {
+        final var order = orderRepository.findByCollection("Creature")
+                .orElse(null)
+                .getOrder();
+
         return repository.findAll().stream()
                 .map(mapper::toMO)
+                .sorted(Comparator.comparingInt(creature -> order.indexOf(creature.identifier())))
                 .toList();
     }
 

@@ -4,8 +4,10 @@ import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.worlds.WorldMO;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.WorldDatabaseMapper;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.model.OrderEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.worlds.PlaceEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.worlds.WorldEntity;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.PlaceMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.WorldMongoRepository;
 import org.gycoding.logs.logger.Logger;
@@ -28,6 +30,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class WorldDatabaseImplTest {
+    @Mock
+    private OrderMongoRepository orderRepository;
+
     @Mock
     private WorldMongoRepository repository;
 
@@ -173,9 +178,11 @@ public class WorldDatabaseImplTest {
     @DisplayName("[WORLD_DATABASE] - Test successful retrieval of a list of Worlds.")
     void testListWorlds() {
         // When
+        final var orderEntity = mock(OrderEntity.class);
         final var worldMO = mock(WorldMO.class);
         final var worldEntity = mock(WorldEntity.class);
 
+        when(orderRepository.findByCollection("World")).thenReturn(Optional.of(orderEntity));
         when(repository.findAll()).thenReturn(List.of(worldEntity));
         when(mapper.toMO(worldEntity)).thenReturn(worldMO);
 
@@ -183,9 +190,10 @@ public class WorldDatabaseImplTest {
         final var result = database.list();
 
         // Verify
+        verify(orderRepository).findByCollection("World");
         verify(repository).findAll();
         verify(mapper).toMO(worldEntity);
-        verifyNoMoreInteractions(repository, mapper);
+        verifyNoMoreInteractions(orderRepository, repository, mapper);
 
         assertEquals(List.of(worldMO), result);
     }

@@ -4,8 +4,10 @@ import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.items.ItemMO;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.ItemDatabaseMapper;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.model.OrderEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.items.ItemEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.ItemMongoRepository;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.logs.logger.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +28,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ItemDatabaseImplTest {
+    @Mock
+    private OrderMongoRepository orderRepository;
+
     @Mock
     private ItemMongoRepository repository;
 
@@ -159,9 +164,11 @@ public class ItemDatabaseImplTest {
     @DisplayName("[ITEM_DATABASE] - Test successful retrieval of a list of Items.")
     void testListItems() {
         // When
+        final var orderEntity = mock(OrderEntity.class);
         final var itemMO = mock(ItemMO.class);
         final var itemEntity = mock(ItemEntity.class);
 
+        when(orderRepository.findByCollection("Item")).thenReturn(Optional.of(orderEntity));
         when(repository.findAll()).thenReturn(List.of(itemEntity));
         when(mapper.toMO(itemEntity)).thenReturn(itemMO);
 
@@ -169,9 +176,10 @@ public class ItemDatabaseImplTest {
         final var result = database.list();
 
         // Verify
+        verify(orderRepository).findByCollection("Item");
         verify(repository).findAll();
         verify(mapper).toMO(itemEntity);
-        verifyNoMoreInteractions(repository, mapper);
+        verifyNoMoreInteractions(orderRepository, repository, mapper);
 
         assertEquals(List.of(itemMO), result);
     }

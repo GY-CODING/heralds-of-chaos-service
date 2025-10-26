@@ -6,20 +6,22 @@ import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.worlds.PlaceMO;
 import org.gycoding.heraldsofchaos.domain.repository.PlaceRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.PlaceDatabaseMapper;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.PlaceMongoRepository;
 import org.gycoding.logs.logger.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class PlaceDatabaseImpl implements PlaceRepository {
+    private final OrderMongoRepository orderRepository;
     private final PlaceMongoRepository repository;
-
     private final PlaceDatabaseMapper mapper;
 
     @Override
@@ -55,8 +57,13 @@ public class PlaceDatabaseImpl implements PlaceRepository {
 
     @Override
     public List<PlaceMO> list() {
+        final var order = orderRepository.findByCollection("Place")
+                .orElse(null)
+                .getOrder();
+
         return repository.findAll().stream()
                 .map(mapper::toMO)
+                .sorted(Comparator.comparingInt(place -> order.indexOf(place.identifier())))
                 .toList();
     }
 

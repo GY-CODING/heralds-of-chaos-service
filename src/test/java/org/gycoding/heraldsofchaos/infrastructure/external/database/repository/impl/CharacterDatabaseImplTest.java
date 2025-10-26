@@ -4,9 +4,11 @@ import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.characters.CharacterMO;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.CharacterDatabaseMapper;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.model.OrderEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.characters.CharacterEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.worlds.WorldEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.CharacterMongoRepository;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.WorldMongoRepository;
 import org.gycoding.logs.logger.Logger;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,6 +30,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CharacterDatabaseImplTest {
+    @Mock
+    private OrderMongoRepository orderRepository;
+
     @Mock
     private CharacterMongoRepository repository;
 
@@ -197,9 +202,11 @@ public class CharacterDatabaseImplTest {
     @DisplayName("[CHARACTER_DATABASE] - Test successful retrieval of a list of Characters.")
     void testListCharacters() {
         // When
+        final var orderEntity = mock(OrderEntity.class);
         final var characterMO = mock(CharacterMO.class);
         final var characterEntity = mock(CharacterEntity.class);
 
+        when(orderRepository.findByCollection("Character")).thenReturn(Optional.of(orderEntity));
         when(repository.findAll()).thenReturn(List.of(characterEntity));
         when(mapper.toMO(characterEntity)).thenReturn(characterMO);
 
@@ -207,9 +214,10 @@ public class CharacterDatabaseImplTest {
         final var result = database.list();
 
         // Verify
+        verify(orderRepository).findByCollection("Character");
         verify(repository).findAll();
         verify(mapper).toMO(characterEntity);
-        verifyNoMoreInteractions(repository, mapper);
+        verifyNoMoreInteractions(orderRepository, repository, mapper);
 
         assertEquals(List.of(characterMO), result);
     }

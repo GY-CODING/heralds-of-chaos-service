@@ -4,8 +4,10 @@ import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
 import org.gycoding.heraldsofchaos.domain.model.creatures.CreatureMO;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.CreatureDatabaseMapper;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.model.OrderEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.creatures.CreatureEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.CreatureMongoRepository;
+import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.logs.logger.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +28,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CreatureDatabaseImplTest {
+    @Mock
+    private OrderMongoRepository orderRepository;
+
     @Mock
     private CreatureMongoRepository repository;
 
@@ -159,9 +164,11 @@ public class CreatureDatabaseImplTest {
     @DisplayName("[CREATURE_DATABASE] - Test successful retrieval of a list of Creatures.")
     void testListCreatures() {
         // When
+        final var orderEntity = mock(OrderEntity.class);
         final var creatureMO = mock(CreatureMO.class);
         final var creatureEntity = mock(CreatureEntity.class);
 
+        when(orderRepository.findByCollection("Creature")).thenReturn(Optional.of(orderEntity));
         when(repository.findAll()).thenReturn(List.of(creatureEntity));
         when(mapper.toMO(creatureEntity)).thenReturn(creatureMO);
 
@@ -169,9 +176,10 @@ public class CreatureDatabaseImplTest {
         final var result = database.list();
 
         // Verify
+        verify(orderRepository).findByCollection("Creature");
         verify(repository).findAll();
         verify(mapper).toMO(creatureEntity);
-        verifyNoMoreInteractions(repository, mapper);
+        verifyNoMoreInteractions(orderRepository, repository, mapper);
 
         assertEquals(List.of(creatureMO), result);
     }
