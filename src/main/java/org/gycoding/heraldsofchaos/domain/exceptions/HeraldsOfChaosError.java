@@ -36,9 +36,7 @@ public enum HeraldsOfChaosError implements ExceptionError {
     WORLD_ALREADY_EXISTS_CONFLICT("World trying to be saved already exists.", HttpStatus.CONFLICT),
     WORLD_SAVE_CONFLICT("An error has occurred while trying to save a new World.", HttpStatus.CONFLICT),
     WORLD_UPDATE_CONFLICT("An error has occurred while trying to update a new World.", HttpStatus.CONFLICT),
-    WORLD_DELETE_CONFLICT("An error has occurred while trying to remove a new World.", HttpStatus.CONFLICT),
-
-    FORBIDDEN("The user has no permission to access this resource.", HttpStatus.FORBIDDEN);
+    WORLD_DELETE_CONFLICT("An error has occurred while trying to remove a new World.", HttpStatus.CONFLICT);
 
     public final String code;
     public final String message;

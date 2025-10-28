@@ -14,7 +14,7 @@
     </parent>
 
     <properties>
-        <quasar.version>0.0.4</quasar.version>
+        <quasar.version>0.0.7</quasar.version>
 	</properties>
 
 	<dependencies>
