@@ -4,6 +4,7 @@ pipeline {
     environment {
         GITHUB_USER = credentials('GITHUB_USER')
         GITHUB_TOKEN = credentials('GITHUB_TOKEN')
+        SONAR_TOKEN = credentials('SONAR_TOKEN')
     }
 
     stages {
@@ -50,7 +51,7 @@ pipeline {
                     mvn sonar:sonar --settings src/main/resources/settings.xml \
                       -Dsonar.projectKey=HOC \
                       -Dsonar.host.url=https://sonar.gycoding.com \
-                      -Dsonar.login=sqp_ebc14b6f4d176f54e63118308b30f64ac496da76 \
+                      -Dsonar.login=$SONAR_TOKEN \
                       -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
                       -Dsonar.coverage.exclusions=**/shared/**,**/model/**,**/config/**,**/dto/**,**/entity/**,**/repository/**,**/exceptions/**,**/HeraldsOfChaosApplication.java
                 '''
