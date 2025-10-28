@@ -1,12 +1,12 @@
 package org.gycoding.heraldsofchaos.infrastructure.api.controller.management;
 
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.items.ItemIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.items.ItemODTO;
 import org.gycoding.heraldsofchaos.application.service.ItemService;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.in.items.ItemRQDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.items.ItemRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.ItemControllerMapper;
+import org.gycoding.quasar.exceptions.model.ServiceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +31,7 @@ public class ItemManagementControllerTest {
 
     @Test
     @DisplayName("[ITEM_MANAGEMENT_CONTROLLER] - Test successful save of a Item.")
-    void testSaveItem() throws APIException {
+    void testSaveItem() throws ServiceException {
         // When
         final var itemRQDTO = mock(ItemRQDTO.class);
         final var itemIDTO = mock(ItemIDTO.class);
@@ -56,7 +56,7 @@ public class ItemManagementControllerTest {
 
     @Test
     @DisplayName("[ITEM_MANAGEMENT_CONTROLLER] - Test successful update of a Item.")
-    void testUpdateItem() throws APIException {
+    void testUpdateItem() throws ServiceException {
         // When
         final var itemRQDTO = mock(ItemRQDTO.class);
         final var itemIDTO = mock(ItemIDTO.class);
@@ -82,7 +82,7 @@ public class ItemManagementControllerTest {
 
     @Test
     @DisplayName("[ITEM_MANAGEMENT_CONTROLLER] - Test successful removal of a Item.")
-    void testRemoveItem() throws APIException {
+    void testRemoveItem() throws ServiceException {
         // When
         final var id = "mock-item-id";
 

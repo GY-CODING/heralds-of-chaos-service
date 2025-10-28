@@ -1,14 +1,15 @@
 package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.impl;
 
-import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.creatures.CreatureMO;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.CreatureDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.OrderEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.creatures.CreatureEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.CreatureMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -73,7 +74,7 @@ public class CreatureDatabaseImplTest {
 
     @Test
     @DisplayName("[CREATURE_DATABASE] - Test successful update of a Creature.")
-    void testUpdateCreature() throws APIException {
+    void testUpdateCreature() throws DatabaseException {
         // When
         final var creatureMO = mock(CreatureMO.class);
         final var creatureEntity = mock(CreatureEntity.class);
@@ -102,17 +103,17 @@ public class CreatureDatabaseImplTest {
     void testWrongUpdateCreature() {
         // When
         final var creatureMO = mock(CreatureMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CREATURE_NOT_FOUND.code,
+                HeraldsOfChaosError.CREATURE_NOT_FOUND.message,
+                HeraldsOfChaosError.CREATURE_NOT_FOUND.status
         );
 
         when(repository.findByIdentifier(creatureMO.identifier())).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                DatabaseException.class,
                 () -> database.update(creatureMO)
         );
 

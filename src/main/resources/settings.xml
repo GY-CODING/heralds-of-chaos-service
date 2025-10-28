@@ -17,14 +17,14 @@
         </repository>
         <repository>
           <id>github</id>
-          <url>https://maven.pkg.github.com/GY-CODING/spring-exceptions</url>
+            <url>https://maven.pkg.github.com/GY-CODING/quasar-parent</url>
           <snapshots>
             <enabled>true</enabled>
           </snapshots>
         </repository>
         <repository>
           <id>github</id>
-          <url>https://maven.pkg.github.com/GY-CODING/spring-logs</url>
+            <url>https://maven.pkg.github.com/GY-CODING/quasar</url>
           <snapshots>
             <enabled>true</enabled>
           </snapshots>

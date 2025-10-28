@@ -1,7 +1,6 @@
 package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.impl;
 
-import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.worlds.WorldMO;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.WorldDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.OrderEntity;
@@ -10,7 +9,9 @@ import org.gycoding.heraldsofchaos.infrastructure.external.database.model.worlds
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.PlaceMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.WorldMongoRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -82,7 +83,7 @@ public class WorldDatabaseImplTest {
 
     @Test
     @DisplayName("[WORLD_DATABASE] - Test successful update of a World.")
-    void testUpdateWorld() throws APIException {
+    void testUpdateWorld() throws DatabaseException {
         // When
         final var worldMO = mock(WorldMO.class);
         final var worldEntity = mock(WorldEntity.class);
@@ -116,17 +117,17 @@ public class WorldDatabaseImplTest {
         // When
         final var worldMO = mock(WorldMO.class);
         final var places = List.of("mock-place-identifier");
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.WORLD_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.WORLD_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.WORLD_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.WORLD_NOT_FOUND.code,
+                HeraldsOfChaosError.WORLD_NOT_FOUND.message,
+                HeraldsOfChaosError.WORLD_NOT_FOUND.status
         );
 
         when(repository.findByIdentifier(worldMO.identifier())).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                DatabaseException.class,
                 () -> database.update(worldMO, places)
         );
 

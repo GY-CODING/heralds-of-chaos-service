@@ -1,14 +1,15 @@
 package org.gycoding.heraldsofchaos.application.service.impl;
 
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.characters.CharacterIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.characters.CharacterODTO;
 import org.gycoding.heraldsofchaos.application.mapper.CharacterServiceMapper;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.characters.CharacterMO;
 import org.gycoding.heraldsofchaos.domain.repository.CharacterRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ public class CharacterServiceImplTest {
 
     @Test
     @DisplayName("[CHARACTER_SERVICE] - Test successful save of a Character.")
-    void testSaveCharacter() throws APIException {
+    void testSaveCharacter() throws ServiceException, DatabaseException {
         // When
         final var characterIDTO = mock(CharacterIDTO.class);
         final var characterMO = mock(CharacterMO.class);
@@ -77,17 +78,17 @@ public class CharacterServiceImplTest {
         // When
         final var characterIDTO = mock(CharacterIDTO.class);
         final var characterMO = mock(CharacterMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CHARACTER_ALREADY_EXISTS_CONFLICT.code,
-                HeraldsOfChaosAPIError.CHARACTER_ALREADY_EXISTS_CONFLICT.message,
-                HeraldsOfChaosAPIError.CHARACTER_ALREADY_EXISTS_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CHARACTER_ALREADY_EXISTS_CONFLICT.code,
+                HeraldsOfChaosError.CHARACTER_ALREADY_EXISTS_CONFLICT.message,
+                HeraldsOfChaosError.CHARACTER_ALREADY_EXISTS_CONFLICT.status
         );
 
         when(repository.get(characterMO.identifier())).thenReturn(Optional.of(characterMO));
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.save(characterIDTO)
         );
 
@@ -101,14 +102,14 @@ public class CharacterServiceImplTest {
 
     @Test
     @DisplayName("[CHARACTER_SERVICE] - Test unsuccessful save of a Character due to an unknown conflict while saving.")
-    void testWrongSaveCharacterUnknownConflict() throws APIException {
+    void testWrongSaveCharacterUnknownConflict() throws ServiceException, DatabaseException {
         // When
         final var characterIDTO = mock(CharacterIDTO.class);
         final var characterMO = mock(CharacterMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CHARACTER_SAVE_CONFLICT.code,
-                HeraldsOfChaosAPIError.CHARACTER_SAVE_CONFLICT.message,
-                HeraldsOfChaosAPIError.CHARACTER_SAVE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CHARACTER_SAVE_CONFLICT.code,
+                HeraldsOfChaosError.CHARACTER_SAVE_CONFLICT.message,
+                HeraldsOfChaosError.CHARACTER_SAVE_CONFLICT.status
         );
 
         when(repository.get(characterMO.identifier())).thenReturn(Optional.empty());
@@ -117,7 +118,7 @@ public class CharacterServiceImplTest {
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.save(characterIDTO)
         );
 
@@ -133,7 +134,7 @@ public class CharacterServiceImplTest {
 
     @Test
     @DisplayName("[CHARACTER_SERVICE] - Test successful update of a Character.")
-    void testUpdateCharacter() throws APIException {
+    void testUpdateCharacter() throws ServiceException, DatabaseException {
         // When
         final var characterIDTO = mock(CharacterIDTO.class);
         final var characterMO = mock(CharacterMO.class);
@@ -158,14 +159,14 @@ public class CharacterServiceImplTest {
 
     @Test
     @DisplayName("[CHARACTER_SERVICE] - Test unsuccessful update of a Character due to an unknown conflict while updating.")
-    void testWrongUpdateCharacterUnknownConflict() throws APIException {
+    void testWrongUpdateCharacterUnknownConflict() throws ServiceException, DatabaseException {
         // When
         final var characterIDTO = mock(CharacterIDTO.class);
         final var characterMO = mock(CharacterMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CHARACTER_UPDATE_CONFLICT.code,
-                HeraldsOfChaosAPIError.CHARACTER_UPDATE_CONFLICT.message,
-                HeraldsOfChaosAPIError.CHARACTER_UPDATE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CHARACTER_UPDATE_CONFLICT.code,
+                HeraldsOfChaosError.CHARACTER_UPDATE_CONFLICT.message,
+                HeraldsOfChaosError.CHARACTER_UPDATE_CONFLICT.status
         );
 
         when(mapper.toMO(characterIDTO)).thenReturn(characterMO);
@@ -173,7 +174,7 @@ public class CharacterServiceImplTest {
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.update(characterIDTO)
         );
 
@@ -188,7 +189,7 @@ public class CharacterServiceImplTest {
 
     @Test
     @DisplayName("[CHARACTER_SERVICE] - Test successful removal of a Character.")
-    void testDeleteCharacter() throws APIException {
+    void testDeleteCharacter() throws ServiceException {
         // When
         final var id = "mock-character-identifier";
 
@@ -205,17 +206,17 @@ public class CharacterServiceImplTest {
     void testWrongDeleteCharacterUnknownConflict() {
         // When
         final var id = "mock-character-identifier";
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CHARACTER_DELETE_CONFLICT.code,
-                HeraldsOfChaosAPIError.CHARACTER_DELETE_CONFLICT.message,
-                HeraldsOfChaosAPIError.CHARACTER_DELETE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CHARACTER_DELETE_CONFLICT.code,
+                HeraldsOfChaosError.CHARACTER_DELETE_CONFLICT.message,
+                HeraldsOfChaosError.CHARACTER_DELETE_CONFLICT.status
         );
 
         doThrow(new RuntimeException("Any exception.")).when(repository).delete(id);
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.delete(id)
         );
 
@@ -229,7 +230,7 @@ public class CharacterServiceImplTest {
 
     @Test
     @DisplayName("[CHARACTER_SERVICE] - Test successful retrieval of a Character.")
-    void testGetCharacter() throws APIException {
+    void testGetCharacter() throws ServiceException {
         // When
         final var id = "mock-character-identifier";
         final var characterMO = mock(CharacterMO.class);
@@ -254,17 +255,17 @@ public class CharacterServiceImplTest {
     void testWrongGetCharacterNotFound() {
         // When
         final var id = "mock-character-identifier";
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CHARACTER_NOT_FOUND.code,
+                HeraldsOfChaosError.CHARACTER_NOT_FOUND.message,
+                HeraldsOfChaosError.CHARACTER_NOT_FOUND.status
         );
 
         when(repository.get(id)).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.get(id, TranslatedString.EN)
         );
 
@@ -278,7 +279,7 @@ public class CharacterServiceImplTest {
 
     @Test
     @DisplayName("[CHARACTER_SERVICE] - Test successful retrieval of a list of Characters.")
-    void testListCharacters() throws APIException {
+    void testListCharacters() throws ServiceException {
         // When
         final var characterMO = mock(CharacterMO.class);
         final var characterODTO = mock(CharacterODTO.class);
@@ -299,7 +300,7 @@ public class CharacterServiceImplTest {
 
     @Test
     @DisplayName("[CHARACTER_SERVICE] - Test successful retrieval of a paginated list of Characters.")
-    void testPageCharacters() throws APIException {
+    void testPageCharacters() throws ServiceException {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page pagedCharacters = mock(Page.class);

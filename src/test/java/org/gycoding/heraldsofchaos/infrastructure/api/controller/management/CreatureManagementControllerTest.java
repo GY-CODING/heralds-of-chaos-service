@@ -1,12 +1,12 @@
 package org.gycoding.heraldsofchaos.infrastructure.api.controller.management;
 
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.creatures.CreatureIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.creatures.CreatureODTO;
 import org.gycoding.heraldsofchaos.application.service.CreatureService;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.in.creatures.CreatureRQDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.creatures.CreatureRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.CreatureControllerMapper;
+import org.gycoding.quasar.exceptions.model.ServiceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +31,7 @@ public class CreatureManagementControllerTest {
 
     @Test
     @DisplayName("[CREATURE_MANAGEMENT_CONTROLLER] - Test successful save of a Creature.")
-    void testSaveCreature() throws APIException {
+    void testSaveCreature() throws ServiceException {
         // When
         final var creatureRQDTO = mock(CreatureRQDTO.class);
         final var creatureIDTO = mock(CreatureIDTO.class);
@@ -56,7 +56,7 @@ public class CreatureManagementControllerTest {
 
     @Test
     @DisplayName("[CREATURE_MANAGEMENT_CONTROLLER] - Test successful update of a Creature.")
-    void testUpdateCreature() throws APIException {
+    void testUpdateCreature() throws ServiceException {
         // When
         final var creatureRQDTO = mock(CreatureRQDTO.class);
         final var creatureIDTO = mock(CreatureIDTO.class);
@@ -82,7 +82,7 @@ public class CreatureManagementControllerTest {
 
     @Test
     @DisplayName("[CREATURE_MANAGEMENT_CONTROLLER] - Test successful removal of a Creature.")
-    void testRemoveCreature() throws APIException {
+    void testRemoveCreature() throws ServiceException {
         // When
         final var id = "mock-creature-id";
 

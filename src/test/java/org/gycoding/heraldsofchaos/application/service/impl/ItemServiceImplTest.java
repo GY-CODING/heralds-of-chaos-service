@@ -1,14 +1,15 @@
 package org.gycoding.heraldsofchaos.application.service.impl;
 
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.items.ItemIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.items.ItemODTO;
 import org.gycoding.heraldsofchaos.application.mapper.ItemServiceMapper;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.items.ItemMO;
 import org.gycoding.heraldsofchaos.domain.repository.ItemRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ public class ItemServiceImplTest {
 
     @Test
     @DisplayName("[ITEM_SERVICE] - Test successful save of a Item.")
-    void testSaveItem() throws APIException {
+    void testSaveItem() throws ServiceException {
         // When
         final var itemIDTO = mock(ItemIDTO.class);
         final var itemMO = mock(ItemMO.class);
@@ -77,17 +78,17 @@ public class ItemServiceImplTest {
         // When
         final var itemIDTO = mock(ItemIDTO.class);
         final var itemMO = mock(ItemMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.ITEM_ALREADY_EXISTS_CONFLICT.code,
-                HeraldsOfChaosAPIError.ITEM_ALREADY_EXISTS_CONFLICT.message,
-                HeraldsOfChaosAPIError.ITEM_ALREADY_EXISTS_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.ITEM_ALREADY_EXISTS_CONFLICT.code,
+                HeraldsOfChaosError.ITEM_ALREADY_EXISTS_CONFLICT.message,
+                HeraldsOfChaosError.ITEM_ALREADY_EXISTS_CONFLICT.status
         );
 
         when(repository.get(itemMO.identifier())).thenReturn(Optional.of(itemMO));
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.save(itemIDTO)
         );
 
@@ -101,14 +102,14 @@ public class ItemServiceImplTest {
 
     @Test
     @DisplayName("[ITEM_SERVICE] - Test unsuccessful save of a Item due to an unknown conflict while saving.")
-    void testWrongSaveItemUnknownConflict() throws APIException {
+    void testWrongSaveItemUnknownConflict() throws ServiceException {
         // When
         final var itemIDTO = mock(ItemIDTO.class);
         final var itemMO = mock(ItemMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.ITEM_SAVE_CONFLICT.code,
-                HeraldsOfChaosAPIError.ITEM_SAVE_CONFLICT.message,
-                HeraldsOfChaosAPIError.ITEM_SAVE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.ITEM_SAVE_CONFLICT.code,
+                HeraldsOfChaosError.ITEM_SAVE_CONFLICT.message,
+                HeraldsOfChaosError.ITEM_SAVE_CONFLICT.status
         );
 
         when(repository.get(itemMO.identifier())).thenReturn(Optional.empty());
@@ -117,7 +118,7 @@ public class ItemServiceImplTest {
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.save(itemIDTO)
         );
 
@@ -133,7 +134,7 @@ public class ItemServiceImplTest {
 
     @Test
     @DisplayName("[ITEM_SERVICE] - Test successful update of a Item.")
-    void testUpdateItem() throws APIException {
+    void testUpdateItem() throws ServiceException, DatabaseException {
         // When
         final var itemIDTO = mock(ItemIDTO.class);
         final var itemMO = mock(ItemMO.class);
@@ -158,14 +159,14 @@ public class ItemServiceImplTest {
 
     @Test
     @DisplayName("[ITEM_SERVICE] - Test unsuccessful update of a Item due to an unknown conflict while updating.")
-    void testWrongUpdateItemUnknownConflict() throws APIException {
+    void testWrongUpdateItemUnknownConflict() throws ServiceException, DatabaseException {
         // When
         final var itemIDTO = mock(ItemIDTO.class);
         final var itemMO = mock(ItemMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.ITEM_UPDATE_CONFLICT.code,
-                HeraldsOfChaosAPIError.ITEM_UPDATE_CONFLICT.message,
-                HeraldsOfChaosAPIError.ITEM_UPDATE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.ITEM_UPDATE_CONFLICT.code,
+                HeraldsOfChaosError.ITEM_UPDATE_CONFLICT.message,
+                HeraldsOfChaosError.ITEM_UPDATE_CONFLICT.status
         );
 
         when(mapper.toMO(itemIDTO)).thenReturn(itemMO);
@@ -173,7 +174,7 @@ public class ItemServiceImplTest {
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.update(itemIDTO)
         );
 
@@ -188,7 +189,7 @@ public class ItemServiceImplTest {
 
     @Test
     @DisplayName("[ITEM_SERVICE] - Test successful removal of a Item.")
-    void testDeleteItem() throws APIException {
+    void testDeleteItem() throws ServiceException {
         // When
         final var id = "mock-item-identifier";
 
@@ -205,17 +206,17 @@ public class ItemServiceImplTest {
     void testWrongDeleteItemUnknownConflict() {
         // When
         final var id = "mock-item-identifier";
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.ITEM_DELETE_CONFLICT.code,
-                HeraldsOfChaosAPIError.ITEM_DELETE_CONFLICT.message,
-                HeraldsOfChaosAPIError.ITEM_DELETE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.ITEM_DELETE_CONFLICT.code,
+                HeraldsOfChaosError.ITEM_DELETE_CONFLICT.message,
+                HeraldsOfChaosError.ITEM_DELETE_CONFLICT.status
         );
 
         doThrow(new RuntimeException("Any exception.")).when(repository).delete(id);
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.delete(id)
         );
 
@@ -229,7 +230,7 @@ public class ItemServiceImplTest {
 
     @Test
     @DisplayName("[ITEM_SERVICE] - Test successful retrieval of a Item.")
-    void testGetItem() throws APIException {
+    void testGetItem() throws ServiceException {
         // When
         final var id = "mock-item-identifier";
         final var itemMO = mock(ItemMO.class);
@@ -254,17 +255,17 @@ public class ItemServiceImplTest {
     void testWrongGetItemNotFound() {
         // When
         final var id = "mock-item-identifier";
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.ITEM_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.ITEM_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.ITEM_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.ITEM_NOT_FOUND.code,
+                HeraldsOfChaosError.ITEM_NOT_FOUND.message,
+                HeraldsOfChaosError.ITEM_NOT_FOUND.status
         );
 
         when(repository.get(id)).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.get(id, TranslatedString.EN)
         );
 
@@ -278,7 +279,7 @@ public class ItemServiceImplTest {
 
     @Test
     @DisplayName("[ITEM_SERVICE] - Test successful retrieval of a list of Items.")
-    void testListItems() throws APIException {
+    void testListItems() throws ServiceException {
         // When
         final var itemMO = mock(ItemMO.class);
         final var itemODTO = mock(ItemODTO.class);
@@ -299,7 +300,7 @@ public class ItemServiceImplTest {
 
     @Test
     @DisplayName("[ITEM_SERVICE] - Test successful retrieval of a paginated list of Items.")
-    void testPageItems() throws APIException {
+    void testPageItems() throws ServiceException {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page pagedItems = mock(Page.class);

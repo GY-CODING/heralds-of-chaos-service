@@ -1,14 +1,14 @@
 package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.impl;
 
 import lombok.AllArgsConstructor;
-import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.worlds.PlaceMO;
 import org.gycoding.heraldsofchaos.domain.repository.PlaceRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.PlaceDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.PlaceMongoRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,13 +30,9 @@ public class PlaceDatabaseImpl implements PlaceRepository {
     }
 
     @Override
-    public PlaceMO update(PlaceMO place) throws APIException {
+    public PlaceMO update(PlaceMO place) throws DatabaseException {
         final var persistedPlace = repository.findByIdentifier(place.identifier()).orElseThrow(() ->
-                new APIException(
-                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.status
-                )
+                new DatabaseException(HeraldsOfChaosError.PLACE_NOT_FOUND)
         );
 
         Logger.debug("Place to be updated found", place.identifier());

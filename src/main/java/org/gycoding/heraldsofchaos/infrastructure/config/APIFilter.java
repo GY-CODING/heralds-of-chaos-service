@@ -4,8 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
+import org.gycoding.quasar.exceptions.model.ConfigException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -13,7 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-public class CustomCORSFilter extends OncePerRequestFilter {
+public class APIFilter extends OncePerRequestFilter {
     @Value("${allowed.apiKey}")
     private String allowedApiKey;
 
@@ -26,11 +26,7 @@ public class CustomCORSFilter extends OncePerRequestFilter {
         } else {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write(
-                    new APIException(
-                            HeraldsOfChaosAPIError.FORBIDDEN.getCode(),
-                            HeraldsOfChaosAPIError.FORBIDDEN.getMessage(),
-                            HeraldsOfChaosAPIError.FORBIDDEN.getStatus().value()
-                    ).toString()
+                    new ConfigException(HeraldsOfChaosError.FORBIDDEN).toString()
             );
         }
     }

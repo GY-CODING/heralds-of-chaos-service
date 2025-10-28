@@ -15,6 +15,7 @@ public class IdentifierGenerator {
                 .replace("é", "e")
                 .replace("í", "i")
                 .replace("ó", "o")
-                .replace("ú", "u");
+                .replace("ú", "u")
+                .replace("ý", "y");
     }
 }

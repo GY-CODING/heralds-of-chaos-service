@@ -1,14 +1,15 @@
 package org.gycoding.heraldsofchaos.application.service.impl;
 
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.creatures.CreatureIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.creatures.CreatureODTO;
 import org.gycoding.heraldsofchaos.application.mapper.CreatureServiceMapper;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.creatures.CreatureMO;
 import org.gycoding.heraldsofchaos.domain.repository.CreatureRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ public class CreatureServiceImplTest {
 
     @Test
     @DisplayName("[CREATURE_SERVICE] - Test successful save of a Creature.")
-    void testSaveCreature() throws APIException {
+    void testSaveCreature() throws ServiceException {
         // When
         final var creatureIDTO = mock(CreatureIDTO.class);
         final var creatureMO = mock(CreatureMO.class);
@@ -77,17 +78,17 @@ public class CreatureServiceImplTest {
         // When
         final var creatureIDTO = mock(CreatureIDTO.class);
         final var creatureMO = mock(CreatureMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CREATURE_ALREADY_EXISTS_CONFLICT.code,
-                HeraldsOfChaosAPIError.CREATURE_ALREADY_EXISTS_CONFLICT.message,
-                HeraldsOfChaosAPIError.CREATURE_ALREADY_EXISTS_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CREATURE_ALREADY_EXISTS_CONFLICT.code,
+                HeraldsOfChaosError.CREATURE_ALREADY_EXISTS_CONFLICT.message,
+                HeraldsOfChaosError.CREATURE_ALREADY_EXISTS_CONFLICT.status
         );
 
         when(repository.get(creatureMO.identifier())).thenReturn(Optional.of(creatureMO));
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.save(creatureIDTO)
         );
 
@@ -101,14 +102,14 @@ public class CreatureServiceImplTest {
 
     @Test
     @DisplayName("[CREATURE_SERVICE] - Test unsuccessful save of a Creature due to an unknown conflict while saving.")
-    void testWrongSaveCreatureUnknownConflict() throws APIException {
+    void testWrongSaveCreatureUnknownConflict() throws ServiceException {
         // When
         final var creatureIDTO = mock(CreatureIDTO.class);
         final var creatureMO = mock(CreatureMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CREATURE_SAVE_CONFLICT.code,
-                HeraldsOfChaosAPIError.CREATURE_SAVE_CONFLICT.message,
-                HeraldsOfChaosAPIError.CREATURE_SAVE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CREATURE_SAVE_CONFLICT.code,
+                HeraldsOfChaosError.CREATURE_SAVE_CONFLICT.message,
+                HeraldsOfChaosError.CREATURE_SAVE_CONFLICT.status
         );
 
         when(repository.get(creatureMO.identifier())).thenReturn(Optional.empty());
@@ -117,7 +118,7 @@ public class CreatureServiceImplTest {
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.save(creatureIDTO)
         );
 
@@ -133,7 +134,7 @@ public class CreatureServiceImplTest {
 
     @Test
     @DisplayName("[CREATURE_SERVICE] - Test successful update of a Creature.")
-    void testUpdateCreature() throws APIException {
+    void testUpdateCreature() throws ServiceException, DatabaseException {
         // When
         final var creatureIDTO = mock(CreatureIDTO.class);
         final var creatureMO = mock(CreatureMO.class);
@@ -158,14 +159,14 @@ public class CreatureServiceImplTest {
 
     @Test
     @DisplayName("[CREATURE_SERVICE] - Test unsuccessful update of a Creature due to an unknown conflict while updating.")
-    void testWrongUpdateCreatureUnknownConflict() throws APIException {
+    void testWrongUpdateCreatureUnknownConflict() throws ServiceException, DatabaseException {
         // When
         final var creatureIDTO = mock(CreatureIDTO.class);
         final var creatureMO = mock(CreatureMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CREATURE_UPDATE_CONFLICT.code,
-                HeraldsOfChaosAPIError.CREATURE_UPDATE_CONFLICT.message,
-                HeraldsOfChaosAPIError.CREATURE_UPDATE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CREATURE_UPDATE_CONFLICT.code,
+                HeraldsOfChaosError.CREATURE_UPDATE_CONFLICT.message,
+                HeraldsOfChaosError.CREATURE_UPDATE_CONFLICT.status
         );
 
         when(mapper.toMO(creatureIDTO)).thenReturn(creatureMO);
@@ -173,7 +174,7 @@ public class CreatureServiceImplTest {
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.update(creatureIDTO)
         );
 
@@ -188,7 +189,7 @@ public class CreatureServiceImplTest {
 
     @Test
     @DisplayName("[CREATURE_SERVICE] - Test successful removal of a Creature.")
-    void testDeleteCreature() throws APIException {
+    void testDeleteCreature() throws ServiceException {
         // When
         final var id = "mock-creature-identifier";
 
@@ -205,17 +206,17 @@ public class CreatureServiceImplTest {
     void testWrongDeleteCreatureUnknownConflict() {
         // When
         final var id = "mock-creature-identifier";
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CREATURE_DELETE_CONFLICT.code,
-                HeraldsOfChaosAPIError.CREATURE_DELETE_CONFLICT.message,
-                HeraldsOfChaosAPIError.CREATURE_DELETE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CREATURE_DELETE_CONFLICT.code,
+                HeraldsOfChaosError.CREATURE_DELETE_CONFLICT.message,
+                HeraldsOfChaosError.CREATURE_DELETE_CONFLICT.status
         );
 
         doThrow(new RuntimeException("Any exception.")).when(repository).delete(id);
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.delete(id)
         );
 
@@ -229,7 +230,7 @@ public class CreatureServiceImplTest {
 
     @Test
     @DisplayName("[CREATURE_SERVICE] - Test successful retrieval of a Creature.")
-    void testGetCreature() throws APIException {
+    void testGetCreature() throws ServiceException {
         // When
         final var id = "mock-creature-identifier";
         final var creatureMO = mock(CreatureMO.class);
@@ -254,17 +255,17 @@ public class CreatureServiceImplTest {
     void testWrongGetCreatureNotFound() {
         // When
         final var id = "mock-creature-identifier";
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CREATURE_NOT_FOUND.code,
+                HeraldsOfChaosError.CREATURE_NOT_FOUND.message,
+                HeraldsOfChaosError.CREATURE_NOT_FOUND.status
         );
 
         when(repository.get(id)).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.get(id, TranslatedString.EN)
         );
 
@@ -278,7 +279,7 @@ public class CreatureServiceImplTest {
 
     @Test
     @DisplayName("[CREATURE_SERVICE] - Test successful retrieval of a list of Creatures.")
-    void testListCreatures() throws APIException {
+    void testListCreatures() throws ServiceException {
         // When
         final var creatureMO = mock(CreatureMO.class);
         final var creatureODTO = mock(CreatureODTO.class);
@@ -299,7 +300,7 @@ public class CreatureServiceImplTest {
 
     @Test
     @DisplayName("[CREATURE_SERVICE] - Test successful retrieval of a paginated list of Creatures.")
-    void testPageCreatures() throws APIException {
+    void testPageCreatures() throws ServiceException {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page pagedCreatures = mock(Page.class);

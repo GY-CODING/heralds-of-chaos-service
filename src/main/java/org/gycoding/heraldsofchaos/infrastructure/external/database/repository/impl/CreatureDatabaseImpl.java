@@ -1,14 +1,14 @@
 package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.impl;
 
 import lombok.AllArgsConstructor;
-import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.creatures.CreatureMO;
 import org.gycoding.heraldsofchaos.domain.repository.CreatureRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.CreatureDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.CreatureMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,13 +30,9 @@ public class CreatureDatabaseImpl implements CreatureRepository {
     }
 
     @Override
-    public CreatureMO update(CreatureMO creature) throws APIException {
+    public CreatureMO update(CreatureMO creature) throws DatabaseException {
         final var persistedCreature = repository.findByIdentifier(creature.identifier()).orElseThrow(() ->
-                new APIException(
-                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.status
-                )
+                new DatabaseException(HeraldsOfChaosError.CREATURE_NOT_FOUND)
         );
 
         Logger.debug("Creature to be updated found", creature.identifier());

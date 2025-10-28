@@ -2,17 +2,17 @@ package org.gycoding.heraldsofchaos.application.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.worlds.WorldIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.worlds.PlaceODTO;
 import org.gycoding.heraldsofchaos.application.dto.out.worlds.WorldODTO;
 import org.gycoding.heraldsofchaos.application.mapper.WorldServiceMapper;
 import org.gycoding.heraldsofchaos.application.service.WorldService;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.worlds.WorldMO;
 import org.gycoding.heraldsofchaos.domain.repository.WorldRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,17 +29,13 @@ public class WorldServiceImpl implements WorldService {
     private final WorldServiceMapper mapper;
 
     @Override
-    public WorldODTO save(WorldIDTO world) throws APIException {
+    public WorldODTO save(WorldIDTO world) throws ServiceException {
         final WorldMO savedWorld;
 
         if (repository.get(world.identifier()).isPresent()) {
             Logger.error("World already exists.", world.identifier());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.WORLD_ALREADY_EXISTS_CONFLICT.code,
-                    HeraldsOfChaosAPIError.WORLD_ALREADY_EXISTS_CONFLICT.message,
-                    HeraldsOfChaosAPIError.WORLD_ALREADY_EXISTS_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.WORLD_ALREADY_EXISTS_CONFLICT);
         }
 
         try {
@@ -47,11 +43,7 @@ public class WorldServiceImpl implements WorldService {
         } catch(Exception e) {
             Logger.error(String.format("An error has occurred while saving a world: %s.", world.identifier()), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.WORLD_SAVE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.WORLD_SAVE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.WORLD_SAVE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.WORLD_SAVE_CONFLICT);
         }
 
         Logger.info("World saved successfully.", savedWorld.identifier());
@@ -60,7 +52,7 @@ public class WorldServiceImpl implements WorldService {
     }
 
     @Override
-    public WorldODTO update(WorldIDTO world) throws APIException {
+    public WorldODTO update(WorldIDTO world) throws ServiceException {
         final WorldMO updatedWorld;
 
         try {
@@ -68,11 +60,7 @@ public class WorldServiceImpl implements WorldService {
         } catch(Exception e) {
             Logger.error(String.format("An error has occurred while updating a world: %s.", world.identifier()), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.WORLD_UPDATE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.WORLD_UPDATE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.WORLD_UPDATE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.WORLD_UPDATE_CONFLICT);
         }
 
         Logger.info("World updated successfully.", updatedWorld.identifier());
@@ -81,51 +69,43 @@ public class WorldServiceImpl implements WorldService {
     }
 
     @Override
-    public void delete(String identifier) throws APIException {
+    public void delete(String identifier) throws ServiceException {
         try {
             repository.delete(identifier);
         } catch (Exception e) {
             Logger.error(String.format("An error has occurred while removing a world: %s.", identifier), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.WORLD_DELETE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.WORLD_DELETE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.WORLD_DELETE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.WORLD_DELETE_CONFLICT);
         }
 
         Logger.info("World removed successfully.", identifier);
     }
 
     @Override
-    public WorldODTO get(String identifier, String language) throws APIException {
+    public WorldODTO get(String identifier, String language) throws ServiceException {
         final var world = repository.get(identifier).orElseThrow(() ->
-                new APIException(
-                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.status
-                )
+                new ServiceException(HeraldsOfChaosError.WORLD_NOT_FOUND)
         );
 
         return mapper.toODTO(world, language);
     }
 
     @Override
-    public List<WorldODTO> list(String language) throws APIException {
+    public List<WorldODTO> list(String language) throws ServiceException {
         final var worlds = repository.list();
 
         return worlds.stream().map(world -> mapper.toODTO(world, language)).toList();
     }
 
     @Override
-    public Page<Map<String, Object>> page(Pageable pageable, String language) throws APIException {
+    public Page<Map<String, Object>> page(Pageable pageable, String language) throws ServiceException {
         final var worlds = repository.page(pageable);
 
         return worlds.map(world -> mapper.toODTO(world, language).toMap());
     }
 
     @Override
-    public List<PlaceODTO> listPlaces(String idWorld, String language) throws APIException {
+    public List<PlaceODTO> listPlaces(String idWorld, String language) throws ServiceException {
         final var world = this.get(idWorld, language);
 
         return world.places();

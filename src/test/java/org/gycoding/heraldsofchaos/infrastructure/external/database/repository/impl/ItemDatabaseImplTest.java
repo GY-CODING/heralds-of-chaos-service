@@ -1,14 +1,15 @@
 package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.impl;
 
-import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.items.ItemMO;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.ItemDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.OrderEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.items.ItemEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.ItemMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -73,7 +74,7 @@ public class ItemDatabaseImplTest {
 
     @Test
     @DisplayName("[ITEM_DATABASE] - Test successful update of a Item.")
-    void testUpdateItem() throws APIException {
+    void testUpdateItem() throws DatabaseException {
         // When
         final var itemMO = mock(ItemMO.class);
         final var itemEntity = mock(ItemEntity.class);
@@ -102,17 +103,17 @@ public class ItemDatabaseImplTest {
     void testWrongUpdateItem() {
         // When
         final var itemMO = mock(ItemMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.ITEM_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.ITEM_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.ITEM_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.ITEM_NOT_FOUND.code,
+                HeraldsOfChaosError.ITEM_NOT_FOUND.message,
+                HeraldsOfChaosError.ITEM_NOT_FOUND.status
         );
 
         when(repository.findByIdentifier(itemMO.identifier())).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                DatabaseException.class,
                 () -> database.update(itemMO)
         );
 

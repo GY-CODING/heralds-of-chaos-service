@@ -1,12 +1,12 @@
 package org.gycoding.heraldsofchaos.infrastructure.api.controller.management;
 
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.characters.CharacterIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.characters.CharacterODTO;
 import org.gycoding.heraldsofchaos.application.service.CharacterService;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.in.characters.CharacterRQDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.characters.CharacterRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.CharacterControllerMapper;
+import org.gycoding.quasar.exceptions.model.ServiceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +31,7 @@ public class CharacterManagementControllerTest {
 
     @Test
     @DisplayName("[CHARACTER_MANAGEMENT_CONTROLLER] - Test successful save of a Character.")
-    void testSaveCharacter() throws APIException {
+    void testSaveCharacter() throws ServiceException {
         // When
         final var characterRQDTO = mock(CharacterRQDTO.class);
         final var characterIDTO = mock(CharacterIDTO.class);
@@ -56,7 +56,7 @@ public class CharacterManagementControllerTest {
 
     @Test
     @DisplayName("[CHARACTER_MANAGEMENT_CONTROLLER] - Test successful update of a Character.")
-    void testUpdateCharacter() throws APIException {
+    void testUpdateCharacter() throws ServiceException {
         // When
         final var characterRQDTO = mock(CharacterRQDTO.class);
         final var characterIDTO = mock(CharacterIDTO.class);
@@ -82,7 +82,7 @@ public class CharacterManagementControllerTest {
 
     @Test
     @DisplayName("[CHARACTER_MANAGEMENT_CONTROLLER] - Test successful removal of a Character.")
-    void testRemoveCharacter() throws APIException {
+    void testRemoveCharacter() throws ServiceException {
         // When
         final var id = "mock-character-id";
 
