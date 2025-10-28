@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import org.gycoding.heraldsofchaos.application.service.ItemService;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.in.items.ItemRQDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.ItemControllerMapper;
-import org.gycoding.quasar.exceptions.model.ServiceException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,17 +17,17 @@ public class ItemManagementController {
     private final ItemControllerMapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<?> save(@Valid @RequestBody ItemRQDTO item) throws ServiceException {
+    public ResponseEntity<?> save(@Valid @RequestBody ItemRQDTO item) throws Exception {
         return ResponseEntity.ok(mapper.toRSDTO(service.save(mapper.toIDTO(item))));
     }
 
     @PatchMapping("")
-    public ResponseEntity<?> update(@Valid @RequestBody ItemRQDTO item, @RequestParam String id) throws ServiceException {
+    public ResponseEntity<?> update(@Valid @RequestBody ItemRQDTO item, @RequestParam String id) throws Exception {
         return ResponseEntity.ok(mapper.toRSDTO(service.update(mapper.toIDTO(item, id))));
     }
 
     @DeleteMapping("")
-    public ResponseEntity<?> removeItem(@RequestParam String id) throws ServiceException {
+    public ResponseEntity<?> removeItem(@RequestParam String id) throws Exception {
         service.delete(id);
 
         return ResponseEntity.noContent().build();
