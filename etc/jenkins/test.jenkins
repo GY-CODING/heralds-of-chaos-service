@@ -4,7 +4,7 @@ pipeline {
     environment {
         GITHUB_USER = credentials('GITHUB_USER')
         GITHUB_TOKEN = credentials('GITHUB_TOKEN')
-        SONAR_TOKEN = credentials('SONAR_TOKEN')
+        SONAR_TOKEN = credentials('HERALDS_OF_CHAOS_SONAR_TOKEN')
     }
 
     stages {
