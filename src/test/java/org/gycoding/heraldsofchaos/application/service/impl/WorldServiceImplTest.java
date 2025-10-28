@@ -1,14 +1,15 @@
 package org.gycoding.heraldsofchaos.application.service.impl;
 
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.worlds.WorldIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.worlds.WorldODTO;
 import org.gycoding.heraldsofchaos.application.mapper.WorldServiceMapper;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.worlds.WorldMO;
 import org.gycoding.heraldsofchaos.domain.repository.WorldRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ public class WorldServiceImplTest {
 
     @Test
     @DisplayName("[WORLD_SERVICE] - Test successful save of a World.")
-    void testSaveWorld() throws APIException {
+    void testSaveWorld() throws ServiceException {
         // When
         final var worldIDTO = mock(WorldIDTO.class);
         final var worldMO = mock(WorldMO.class);
@@ -77,17 +78,17 @@ public class WorldServiceImplTest {
         // When
         final var worldIDTO = mock(WorldIDTO.class);
         final var worldMO = mock(WorldMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.WORLD_ALREADY_EXISTS_CONFLICT.code,
-                HeraldsOfChaosAPIError.WORLD_ALREADY_EXISTS_CONFLICT.message,
-                HeraldsOfChaosAPIError.WORLD_ALREADY_EXISTS_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.WORLD_ALREADY_EXISTS_CONFLICT.code,
+                HeraldsOfChaosError.WORLD_ALREADY_EXISTS_CONFLICT.message,
+                HeraldsOfChaosError.WORLD_ALREADY_EXISTS_CONFLICT.status
         );
 
         when(repository.get(worldMO.identifier())).thenReturn(Optional.of(worldMO));
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.save(worldIDTO)
         );
 
@@ -105,10 +106,10 @@ public class WorldServiceImplTest {
         // When
         final var worldIDTO = mock(WorldIDTO.class);
         final var worldMO = mock(WorldMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.WORLD_SAVE_CONFLICT.code,
-                HeraldsOfChaosAPIError.WORLD_SAVE_CONFLICT.message,
-                HeraldsOfChaosAPIError.WORLD_SAVE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.WORLD_SAVE_CONFLICT.code,
+                HeraldsOfChaosError.WORLD_SAVE_CONFLICT.message,
+                HeraldsOfChaosError.WORLD_SAVE_CONFLICT.status
         );
 
         when(repository.get(worldMO.identifier())).thenReturn(Optional.empty());
@@ -117,7 +118,7 @@ public class WorldServiceImplTest {
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.save(worldIDTO)
         );
 
@@ -133,7 +134,7 @@ public class WorldServiceImplTest {
 
     @Test
     @DisplayName("[WORLD_SERVICE] - Test successful update of a World.")
-    void testUpdateWorld() throws APIException {
+    void testUpdateWorld() throws ServiceException, DatabaseException {
         // When
         final var worldIDTO = mock(WorldIDTO.class);
         final var worldMO = mock(WorldMO.class);
@@ -158,14 +159,14 @@ public class WorldServiceImplTest {
 
     @Test
     @DisplayName("[WORLD_SERVICE] - Test unsuccessful update of a World due to an unknown conflict while updating.")
-    void testWrongUpdateWorldUnknownConflict() throws APIException {
+    void testWrongUpdateWorldUnknownConflict() throws ServiceException, DatabaseException {
         // When
         final var worldIDTO = mock(WorldIDTO.class);
         final var worldMO = mock(WorldMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.WORLD_UPDATE_CONFLICT.code,
-                HeraldsOfChaosAPIError.WORLD_UPDATE_CONFLICT.message,
-                HeraldsOfChaosAPIError.WORLD_UPDATE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.WORLD_UPDATE_CONFLICT.code,
+                HeraldsOfChaosError.WORLD_UPDATE_CONFLICT.message,
+                HeraldsOfChaosError.WORLD_UPDATE_CONFLICT.status
         );
 
         when(mapper.toMO(worldIDTO)).thenReturn(worldMO);
@@ -173,7 +174,7 @@ public class WorldServiceImplTest {
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.update(worldIDTO)
         );
 
@@ -188,7 +189,7 @@ public class WorldServiceImplTest {
 
     @Test
     @DisplayName("[WORLD_SERVICE] - Test successful removal of a World.")
-    void testDeleteWorld() throws APIException {
+    void testDeleteWorld() throws ServiceException {
         // When
         final var id = "mock-world-identifier";
 
@@ -205,17 +206,17 @@ public class WorldServiceImplTest {
     void testWrongDeleteWorldUnknownConflict() {
         // When
         final var id = "mock-world-identifier";
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.WORLD_DELETE_CONFLICT.code,
-                HeraldsOfChaosAPIError.WORLD_DELETE_CONFLICT.message,
-                HeraldsOfChaosAPIError.WORLD_DELETE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.WORLD_DELETE_CONFLICT.code,
+                HeraldsOfChaosError.WORLD_DELETE_CONFLICT.message,
+                HeraldsOfChaosError.WORLD_DELETE_CONFLICT.status
         );
 
         doThrow(new RuntimeException("Any exception.")).when(repository).delete(id);
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.delete(id)
         );
 
@@ -229,7 +230,7 @@ public class WorldServiceImplTest {
 
     @Test
     @DisplayName("[WORLD_SERVICE] - Test successful retrieval of a World.")
-    void testGetWorld() throws APIException {
+    void testGetWorld() throws ServiceException {
         // When
         final var id = "mock-world-identifier";
         final var worldMO = mock(WorldMO.class);
@@ -254,17 +255,17 @@ public class WorldServiceImplTest {
     void testWrongGetWorldNotFound() {
         // When
         final var id = "mock-world-identifier";
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.WORLD_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.WORLD_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.WORLD_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.WORLD_NOT_FOUND.code,
+                HeraldsOfChaosError.WORLD_NOT_FOUND.message,
+                HeraldsOfChaosError.WORLD_NOT_FOUND.status
         );
 
         when(repository.get(id)).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.get(id, TranslatedString.EN)
         );
 
@@ -278,7 +279,7 @@ public class WorldServiceImplTest {
 
     @Test
     @DisplayName("[WORLD_SERVICE] - Test successful retrieval of a list of Worlds.")
-    void testListWorlds() throws APIException {
+    void testListWorlds() throws ServiceException {
         // When
         final var worldMO = mock(WorldMO.class);
         final var worldODTO = mock(WorldODTO.class);
@@ -299,7 +300,7 @@ public class WorldServiceImplTest {
 
     @Test
     @DisplayName("[WORLD_SERVICE] - Test successful retrieval of a paginated list of Worlds.")
-    void testPageWorlds() throws APIException {
+    void testPageWorlds() throws ServiceException {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page pagedWorlds = mock(Page.class);
@@ -316,7 +317,7 @@ public class WorldServiceImplTest {
 
     @Test
     @DisplayName("[WORLD_SERVICE] - Test successful retrieval of a list of Places inside a specified World.")
-    void testListPlaces() throws APIException {
+    void testListPlaces() throws ServiceException {
         // When
         final var id = "mock-world-identifier";
         final var worldMO = mock(WorldMO.class);

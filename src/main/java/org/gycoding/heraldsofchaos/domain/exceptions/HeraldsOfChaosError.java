@@ -1,10 +1,11 @@
 package org.gycoding.heraldsofchaos.domain.exceptions;
 
 import lombok.Getter;
+import org.gycoding.quasar.exceptions.model.ExceptionError;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum HeraldsOfChaosAPIError {
+public enum HeraldsOfChaosError implements ExceptionError {
     CHARACTER_NOT_FOUND("Character was not found.", HttpStatus.NOT_FOUND),
     CHARACTER_LIST_NOT_FOUND("List of Characters not found.", HttpStatus.NOT_FOUND),
     CREATURE_NOT_FOUND("Creature was not found.", HttpStatus.NOT_FOUND),
@@ -43,7 +44,7 @@ public enum HeraldsOfChaosAPIError {
     public final String message;
     public final HttpStatus status;
 
-    HeraldsOfChaosAPIError(String message, HttpStatus status) {
+    HeraldsOfChaosError(String message, HttpStatus status) {
         this.code       = this.name();
         this.message    = message;
         this.status     = status;

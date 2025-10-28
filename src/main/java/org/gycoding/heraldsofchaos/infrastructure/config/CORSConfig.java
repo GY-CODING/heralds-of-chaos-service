@@ -12,7 +12,7 @@ public class CORSConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("https://api.gateway.com", "http://localhost")
-                .allowedMethods(HttpMethod.GET.name())
+                .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PATCH.name(), HttpMethod.DELETE.name())
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3600);

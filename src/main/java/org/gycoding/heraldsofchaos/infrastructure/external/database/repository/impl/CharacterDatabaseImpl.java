@@ -1,15 +1,15 @@
 package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.impl;
 
 import lombok.AllArgsConstructor;
-import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.characters.CharacterMO;
 import org.gycoding.heraldsofchaos.domain.repository.CharacterRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.CharacterDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.CharacterMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.WorldMongoRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,13 +27,9 @@ public class CharacterDatabaseImpl implements CharacterRepository {
     private final WorldMongoRepository worldRepository;
 
     @Override
-    public CharacterMO save(CharacterMO character) throws APIException {
+    public CharacterMO save(CharacterMO character) throws DatabaseException {
         final var persistedWorld = worldRepository.findByIdentifier(character.world()).orElseThrow(() ->
-                new APIException(
-                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.WORLD_NOT_FOUND.status
-                )
+                new DatabaseException(HeraldsOfChaosError.WORLD_NOT_FOUND)
         );
 
         Logger.debug(String.format("World found for character: %s", character.identifier()), character.world());
@@ -42,13 +38,9 @@ public class CharacterDatabaseImpl implements CharacterRepository {
     }
 
     @Override
-    public CharacterMO update(CharacterMO character) throws APIException {
+    public CharacterMO update(CharacterMO character) throws DatabaseException {
         final var persistedCharacter = repository.findByIdentifier(character.identifier()).orElseThrow(() ->
-                new APIException(
-                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.status
-                )
+                new DatabaseException(HeraldsOfChaosError.CHARACTER_NOT_FOUND)
         );
 
         Logger.debug("Character to be updated found", character.identifier());

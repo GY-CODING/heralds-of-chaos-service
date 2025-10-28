@@ -2,16 +2,16 @@ package org.gycoding.heraldsofchaos.application.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.worlds.PlaceIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.worlds.PlaceODTO;
 import org.gycoding.heraldsofchaos.application.mapper.PlaceServiceMapper;
 import org.gycoding.heraldsofchaos.application.service.PlaceService;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.worlds.PlaceMO;
 import org.gycoding.heraldsofchaos.domain.repository.PlaceRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,17 +28,13 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceServiceMapper mapper;
 
     @Override
-    public PlaceODTO save(PlaceIDTO place) throws APIException {
+    public PlaceODTO save(PlaceIDTO place) throws ServiceException {
         final PlaceMO savedPlace;
 
         if (repository.get(place.identifier()).isPresent()) {
             Logger.error("Place already exists.", place.identifier());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.PLACE_ALREADY_EXISTS_CONFLICT.code,
-                    HeraldsOfChaosAPIError.PLACE_ALREADY_EXISTS_CONFLICT.message,
-                    HeraldsOfChaosAPIError.PLACE_ALREADY_EXISTS_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.PLACE_ALREADY_EXISTS_CONFLICT);
         }
 
         try {
@@ -46,11 +42,7 @@ public class PlaceServiceImpl implements PlaceService {
         } catch(Exception e) {
             Logger.error(String.format("An error has occurred while saving a place: %s.", place.identifier()), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.PLACE_SAVE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.PLACE_SAVE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.PLACE_SAVE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.PLACE_SAVE_CONFLICT);
         }
 
         Logger.info("Place saved successfully.", savedPlace.identifier());
@@ -59,7 +51,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public PlaceODTO update(PlaceIDTO place) throws APIException {
+    public PlaceODTO update(PlaceIDTO place) throws ServiceException {
         final PlaceMO updatedPlace;
 
         try {
@@ -67,11 +59,7 @@ public class PlaceServiceImpl implements PlaceService {
         } catch(Exception e) {
             Logger.error(String.format("An error has occurred while updating a place: %s.", place.identifier()), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.PLACE_UPDATE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.PLACE_UPDATE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.PLACE_UPDATE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.PLACE_UPDATE_CONFLICT);
         }
 
         Logger.info("Place updated successfully.", updatedPlace.identifier());
@@ -80,44 +68,36 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public void delete(String identifier) throws APIException {
+    public void delete(String identifier) throws ServiceException {
         try {
             repository.delete(identifier);
         } catch (Exception e) {
             Logger.error(String.format("An error has occurred while removing a place: %s.", identifier), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.PLACE_DELETE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.PLACE_DELETE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.PLACE_DELETE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.PLACE_DELETE_CONFLICT);
         }
 
         Logger.info("Place removed successfully.", identifier);
     }
 
     @Override
-    public PlaceODTO get(String identifier, String language) throws APIException {
+    public PlaceODTO get(String identifier, String language) throws ServiceException {
         final var place = repository.get(identifier).orElseThrow(() ->
-                new APIException(
-                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.PLACE_NOT_FOUND.status
-                )
+                new ServiceException(HeraldsOfChaosError.PLACE_NOT_FOUND)
         );
 
         return mapper.toODTO(place, language);
     }
 
     @Override
-    public List<PlaceODTO> list(String language) throws APIException {
+    public List<PlaceODTO> list(String language) throws ServiceException {
         final var places = repository.list();
 
         return places.stream().map(place -> mapper.toODTO(place, language)).toList();
     }
 
     @Override
-    public Page<Map<String, Object>> page(Pageable pageable, String language) throws APIException {
+    public Page<Map<String, Object>> page(Pageable pageable, String language) throws ServiceException {
         final var places = repository.page(pageable);
 
         return places.map(place -> mapper.toODTO(place, language).toMap());

@@ -1,7 +1,6 @@
 package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.impl;
 
-import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.characters.CharacterMO;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.CharacterDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.OrderEntity;
@@ -10,7 +9,9 @@ import org.gycoding.heraldsofchaos.infrastructure.external.database.model.worlds
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.CharacterMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.WorldMongoRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,7 @@ public class CharacterDatabaseImplTest {
 
     @Test
     @DisplayName("[CHARACTER_DATABASE] - Test successful save of a Character.")
-    void testSaveCharacter() throws APIException {
+    void testSaveCharacter() throws DatabaseException {
         // When
         final var characterMO = mock(CharacterMO.class);
         final var characterEntity = mock(CharacterEntity.class);
@@ -84,17 +85,17 @@ public class CharacterDatabaseImplTest {
     void testWrongSaveCharacter() {
         // When
         final var characterMO = mock(CharacterMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.WORLD_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.WORLD_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.WORLD_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.WORLD_NOT_FOUND.code,
+                HeraldsOfChaosError.WORLD_NOT_FOUND.message,
+                HeraldsOfChaosError.WORLD_NOT_FOUND.status
         );
 
         when(worldRepository.findByIdentifier(characterMO.world())).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                DatabaseException.class,
                 () -> database.save(characterMO)
         );
 
@@ -108,7 +109,7 @@ public class CharacterDatabaseImplTest {
 
     @Test
     @DisplayName("[CHARACTER_DATABASE] - Test successful update of a Character.")
-    void testUpdateCharacter() throws APIException {
+    void testUpdateCharacter() throws DatabaseException {
         // When
         final var characterMO = mock(CharacterMO.class);
         final var characterEntity = mock(CharacterEntity.class);
@@ -140,17 +141,17 @@ public class CharacterDatabaseImplTest {
     void testWrongUpdateCharacter() {
         // When
         final var characterMO = mock(CharacterMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.CHARACTER_NOT_FOUND.code,
+                HeraldsOfChaosError.CHARACTER_NOT_FOUND.message,
+                HeraldsOfChaosError.CHARACTER_NOT_FOUND.status
         );
 
         when(repository.findByIdentifier(characterMO.identifier())).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                DatabaseException.class,
                 () -> database.update(characterMO)
         );
 

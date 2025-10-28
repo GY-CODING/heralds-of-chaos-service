@@ -2,16 +2,16 @@ package org.gycoding.heraldsofchaos.application.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.characters.CharacterIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.characters.CharacterODTO;
 import org.gycoding.heraldsofchaos.application.mapper.CharacterServiceMapper;
 import org.gycoding.heraldsofchaos.application.service.CharacterService;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.characters.CharacterMO;
 import org.gycoding.heraldsofchaos.domain.repository.CharacterRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,17 +28,13 @@ public class CharacterServiceImpl implements CharacterService {
     private final CharacterServiceMapper mapper;
 
     @Override
-    public CharacterODTO save(CharacterIDTO character) throws APIException {
+    public CharacterODTO save(CharacterIDTO character) throws ServiceException {
         final CharacterMO savedCharacter;
 
         if (repository.get(character.identifier()).isPresent()) {
             Logger.error("Character already exists.", character.identifier());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CHARACTER_ALREADY_EXISTS_CONFLICT.code,
-                    HeraldsOfChaosAPIError.CHARACTER_ALREADY_EXISTS_CONFLICT.message,
-                    HeraldsOfChaosAPIError.CHARACTER_ALREADY_EXISTS_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.CHARACTER_ALREADY_EXISTS_CONFLICT);
         }
 
         try {
@@ -46,11 +42,7 @@ public class CharacterServiceImpl implements CharacterService {
         } catch(Exception e) {
             Logger.error(String.format("An error has occurred while saving a character: %s.", character.identifier()), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CHARACTER_SAVE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.CHARACTER_SAVE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.CHARACTER_SAVE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.CHARACTER_SAVE_CONFLICT);
         }
 
         Logger.info("Character saved successfully.", savedCharacter.identifier());
@@ -59,7 +51,7 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     @Override
-    public CharacterODTO update(CharacterIDTO character) throws APIException {
+    public CharacterODTO update(CharacterIDTO character) throws ServiceException {
         final CharacterMO updatedCharacter;
 
         try {
@@ -67,11 +59,7 @@ public class CharacterServiceImpl implements CharacterService {
         } catch(Exception e) {
             Logger.error(String.format("An error has occurred while updating a character: %s.", character.identifier()), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CHARACTER_UPDATE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.CHARACTER_UPDATE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.CHARACTER_UPDATE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.CHARACTER_UPDATE_CONFLICT);
         }
 
         Logger.info("Character updated successfully.", updatedCharacter.identifier());
@@ -80,37 +68,29 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     @Override
-    public void delete(String identifier) throws APIException {
+    public void delete(String identifier) throws ServiceException {
         try {
             repository.delete(identifier);
         } catch (Exception e) {
             Logger.error(String.format("An error has occurred while removing a character: %s.", identifier), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CHARACTER_DELETE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.CHARACTER_DELETE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.CHARACTER_DELETE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.CHARACTER_DELETE_CONFLICT);
         }
 
         Logger.info("Character removed successfully.", identifier);
     }
 
     @Override
-    public CharacterODTO get(String identifier, String language) throws APIException {
+    public CharacterODTO get(String identifier, String language) throws ServiceException {
         final var character = repository.get(identifier).orElseThrow(() ->
-                new APIException(
-                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.CHARACTER_NOT_FOUND.status
-                )
+                new ServiceException(HeraldsOfChaosError.CHARACTER_NOT_FOUND)
         );
 
         return mapper.toODTO(character, language);
     }
 
     @Override
-    public List<CharacterODTO> list(String language) throws APIException {
+    public List<CharacterODTO> list(String language) throws ServiceException {
         final var characters = repository.list();
 
         return characters.stream()
@@ -119,7 +99,7 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     @Override
-    public Page<Map<String, Object>> page(Pageable pageable, String language) throws APIException {
+    public Page<Map<String, Object>> page(Pageable pageable, String language) throws ServiceException {
         final var characters = repository.page(pageable);
 
         return characters.map(character -> mapper.toODTO(character, language).toMap());

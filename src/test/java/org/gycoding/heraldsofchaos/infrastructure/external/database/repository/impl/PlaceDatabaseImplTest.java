@@ -1,14 +1,15 @@
 package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.impl;
 
-import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.worlds.PlaceMO;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.PlaceDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.OrderEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.model.worlds.PlaceEntity;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.PlaceMongoRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -73,7 +74,7 @@ public class PlaceDatabaseImplTest {
 
     @Test
     @DisplayName("[PLACE_DATABASE] - Test successful update of a Place.")
-    void testUpdatePlace() throws APIException {
+    void testUpdatePlace() throws DatabaseException {
         // When
         final var placeMO = mock(PlaceMO.class);
         final var placeEntity = mock(PlaceEntity.class);
@@ -102,17 +103,17 @@ public class PlaceDatabaseImplTest {
     void testWrongUpdatePlace() {
         // When
         final var placeMO = mock(PlaceMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.PLACE_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.PLACE_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.PLACE_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.PLACE_NOT_FOUND.code,
+                HeraldsOfChaosError.PLACE_NOT_FOUND.message,
+                HeraldsOfChaosError.PLACE_NOT_FOUND.status
         );
 
         when(repository.findByIdentifier(placeMO.identifier())).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                DatabaseException.class,
                 () -> database.update(placeMO)
         );
 

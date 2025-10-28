@@ -1,14 +1,15 @@
 package org.gycoding.heraldsofchaos.application.service.impl;
 
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.worlds.PlaceIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.worlds.PlaceODTO;
 import org.gycoding.heraldsofchaos.application.mapper.PlaceServiceMapper;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.worlds.PlaceMO;
 import org.gycoding.heraldsofchaos.domain.repository.PlaceRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,7 @@ public class PlaceServiceImplTest {
 
     @Test
     @DisplayName("[PLACE_SERVICE] - Test successful save of a Place.")
-    void testSavePlace() throws APIException {
+    void testSavePlace() throws ServiceException {
         // When
         final var placeIDTO = mock(PlaceIDTO.class);
         final var placeMO = mock(PlaceMO.class);
@@ -77,17 +78,17 @@ public class PlaceServiceImplTest {
         // When
         final var placeIDTO = mock(PlaceIDTO.class);
         final var placeMO = mock(PlaceMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.PLACE_ALREADY_EXISTS_CONFLICT.code,
-                HeraldsOfChaosAPIError.PLACE_ALREADY_EXISTS_CONFLICT.message,
-                HeraldsOfChaosAPIError.PLACE_ALREADY_EXISTS_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.PLACE_ALREADY_EXISTS_CONFLICT.code,
+                HeraldsOfChaosError.PLACE_ALREADY_EXISTS_CONFLICT.message,
+                HeraldsOfChaosError.PLACE_ALREADY_EXISTS_CONFLICT.status
         );
 
         when(repository.get(placeMO.identifier())).thenReturn(Optional.of(placeMO));
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.save(placeIDTO)
         );
 
@@ -101,14 +102,14 @@ public class PlaceServiceImplTest {
 
     @Test
     @DisplayName("[PLACE_SERVICE] - Test unsuccessful save of a Place due to an unknown conflict while saving.")
-    void testWrongSavePlaceUnknownConflict() throws APIException {
+    void testWrongSavePlaceUnknownConflict() throws ServiceException {
         // When
         final var placeIDTO = mock(PlaceIDTO.class);
         final var placeMO = mock(PlaceMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.PLACE_SAVE_CONFLICT.code,
-                HeraldsOfChaosAPIError.PLACE_SAVE_CONFLICT.message,
-                HeraldsOfChaosAPIError.PLACE_SAVE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.PLACE_SAVE_CONFLICT.code,
+                HeraldsOfChaosError.PLACE_SAVE_CONFLICT.message,
+                HeraldsOfChaosError.PLACE_SAVE_CONFLICT.status
         );
 
         when(repository.get(placeMO.identifier())).thenReturn(Optional.empty());
@@ -117,7 +118,7 @@ public class PlaceServiceImplTest {
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.save(placeIDTO)
         );
 
@@ -133,7 +134,7 @@ public class PlaceServiceImplTest {
 
     @Test
     @DisplayName("[PLACE_SERVICE] - Test successful update of a Place.")
-    void testUpdatePlace() throws APIException {
+    void testUpdatePlace() throws ServiceException, DatabaseException {
         // When
         final var placeIDTO = mock(PlaceIDTO.class);
         final var placeMO = mock(PlaceMO.class);
@@ -158,14 +159,14 @@ public class PlaceServiceImplTest {
 
     @Test
     @DisplayName("[PLACE_SERVICE] - Test unsuccessful update of a Place due to an unknown conflict while updating.")
-    void testWrongUpdatePlaceUnknownConflict() throws APIException {
+    void testWrongUpdatePlaceUnknownConflict() throws ServiceException, DatabaseException {
         // When
         final var placeIDTO = mock(PlaceIDTO.class);
         final var placeMO = mock(PlaceMO.class);
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.PLACE_UPDATE_CONFLICT.code,
-                HeraldsOfChaosAPIError.PLACE_UPDATE_CONFLICT.message,
-                HeraldsOfChaosAPIError.PLACE_UPDATE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.PLACE_UPDATE_CONFLICT.code,
+                HeraldsOfChaosError.PLACE_UPDATE_CONFLICT.message,
+                HeraldsOfChaosError.PLACE_UPDATE_CONFLICT.status
         );
 
         when(mapper.toMO(placeIDTO)).thenReturn(placeMO);
@@ -173,7 +174,7 @@ public class PlaceServiceImplTest {
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.update(placeIDTO)
         );
 
@@ -188,7 +189,7 @@ public class PlaceServiceImplTest {
 
     @Test
     @DisplayName("[PLACE_SERVICE] - Test successful removal of a Place.")
-    void testDeletePlace() throws APIException {
+    void testDeletePlace() throws ServiceException {
         // When
         final var id = "mock-place-identifier";
 
@@ -205,17 +206,17 @@ public class PlaceServiceImplTest {
     void testWrongDeletePlaceUnknownConflict() {
         // When
         final var id = "mock-place-identifier";
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.PLACE_DELETE_CONFLICT.code,
-                HeraldsOfChaosAPIError.PLACE_DELETE_CONFLICT.message,
-                HeraldsOfChaosAPIError.PLACE_DELETE_CONFLICT.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.PLACE_DELETE_CONFLICT.code,
+                HeraldsOfChaosError.PLACE_DELETE_CONFLICT.message,
+                HeraldsOfChaosError.PLACE_DELETE_CONFLICT.status
         );
 
         doThrow(new RuntimeException("Any exception.")).when(repository).delete(id);
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.delete(id)
         );
 
@@ -229,7 +230,7 @@ public class PlaceServiceImplTest {
 
     @Test
     @DisplayName("[PLACE_SERVICE] - Test successful retrieval of a Place.")
-    void testGetPlace() throws APIException {
+    void testGetPlace() throws ServiceException {
         // When
         final var id = "mock-place-identifier";
         final var placeMO = mock(PlaceMO.class);
@@ -254,17 +255,17 @@ public class PlaceServiceImplTest {
     void testWrongGetPlaceNotFound() {
         // When
         final var id = "mock-place-identifier";
-        final var expectedException = new APIException(
-                HeraldsOfChaosAPIError.PLACE_NOT_FOUND.code,
-                HeraldsOfChaosAPIError.PLACE_NOT_FOUND.message,
-                HeraldsOfChaosAPIError.PLACE_NOT_FOUND.status
+        final var expectedException = new ServiceException(
+                HeraldsOfChaosError.PLACE_NOT_FOUND.code,
+                HeraldsOfChaosError.PLACE_NOT_FOUND.message,
+                HeraldsOfChaosError.PLACE_NOT_FOUND.status
         );
 
         when(repository.get(id)).thenReturn(Optional.empty());
 
         // Then
         final var error = assertThrows(
-                APIException.class,
+                ServiceException.class,
                 () -> service.get(id, TranslatedString.EN)
         );
 
@@ -278,7 +279,7 @@ public class PlaceServiceImplTest {
 
     @Test
     @DisplayName("[PLACE_SERVICE] - Test successful retrieval of a list of Places.")
-    void testListPlaces() throws APIException {
+    void testListPlaces() throws ServiceException {
         // When
         final var placeMO = mock(PlaceMO.class);
         final var placeODTO = mock(PlaceODTO.class);
@@ -299,7 +300,7 @@ public class PlaceServiceImplTest {
 
     @Test
     @DisplayName("[PLACE_SERVICE] - Test successful retrieval of a paginated list of Places.")
-    void testPagePlaces() throws APIException {
+    void testPagePlaces() throws ServiceException {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page pagedPlaces = mock(Page.class);

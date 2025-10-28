@@ -1,14 +1,14 @@
 package org.gycoding.heraldsofchaos.infrastructure.external.database.repository.impl;
 
 import lombok.AllArgsConstructor;
-import org.gycoding.exceptions.model.APIException;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.items.ItemMO;
 import org.gycoding.heraldsofchaos.domain.repository.ItemRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.mapper.ItemDatabaseMapper;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.ItemMongoRepository;
 import org.gycoding.heraldsofchaos.infrastructure.external.database.repository.OrderMongoRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.DatabaseException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,13 +30,9 @@ public class ItemDatabaseImpl implements ItemRepository {
     }
 
     @Override
-    public ItemMO update(ItemMO item) throws APIException {
+    public ItemMO update(ItemMO item) throws DatabaseException {
         final var persistedItem = repository.findByIdentifier(item.identifier()).orElseThrow(() ->
-                new APIException(
-                        HeraldsOfChaosAPIError.ITEM_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.ITEM_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.ITEM_NOT_FOUND.status
-                )
+                new DatabaseException(HeraldsOfChaosError.ITEM_NOT_FOUND)
         );
 
         Logger.debug("Item to be updated found", item.identifier());

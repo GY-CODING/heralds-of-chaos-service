@@ -2,16 +2,16 @@ package org.gycoding.heraldsofchaos.application.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.gycoding.exceptions.model.APIException;
 import org.gycoding.heraldsofchaos.application.dto.in.creatures.CreatureIDTO;
 import org.gycoding.heraldsofchaos.application.dto.out.creatures.CreatureODTO;
 import org.gycoding.heraldsofchaos.application.mapper.CreatureServiceMapper;
 import org.gycoding.heraldsofchaos.application.service.CreatureService;
-import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosAPIError;
+import org.gycoding.heraldsofchaos.domain.exceptions.HeraldsOfChaosError;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.domain.model.creatures.CreatureMO;
 import org.gycoding.heraldsofchaos.domain.repository.CreatureRepository;
-import org.gycoding.logs.logger.Logger;
+import org.gycoding.quasar.exceptions.model.ServiceException;
+import org.gycoding.quasar.logs.service.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,17 +28,13 @@ public class CreatureServiceImpl implements CreatureService {
     private final CreatureServiceMapper mapper;
 
     @Override
-    public CreatureODTO save(CreatureIDTO creature) throws APIException {
+    public CreatureODTO save(CreatureIDTO creature) throws ServiceException {
         final CreatureMO savedCreature;
 
         if (repository.get(creature.identifier()).isPresent()) {
             Logger.error("Creature already exists.", creature.identifier());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CREATURE_ALREADY_EXISTS_CONFLICT.code,
-                    HeraldsOfChaosAPIError.CREATURE_ALREADY_EXISTS_CONFLICT.message,
-                    HeraldsOfChaosAPIError.CREATURE_ALREADY_EXISTS_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.CREATURE_ALREADY_EXISTS_CONFLICT);
         }
 
         try {
@@ -46,11 +42,7 @@ public class CreatureServiceImpl implements CreatureService {
         } catch(Exception e) {
             Logger.error(String.format("An error has occurred while saving a creature: %s.", creature.identifier()), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CREATURE_SAVE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.CREATURE_SAVE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.CREATURE_SAVE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.CREATURE_SAVE_CONFLICT);
         }
 
         Logger.info("Creature saved successfully.", savedCreature.identifier());
@@ -59,7 +51,7 @@ public class CreatureServiceImpl implements CreatureService {
     }
 
     @Override
-    public CreatureODTO update(CreatureIDTO creature) throws APIException {
+    public CreatureODTO update(CreatureIDTO creature) throws ServiceException {
         final CreatureMO updatedCreature;
 
         try {
@@ -67,11 +59,7 @@ public class CreatureServiceImpl implements CreatureService {
         } catch(Exception e) {
             Logger.error(String.format("An error has occurred while updating a creature: %s.", creature.identifier()), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CREATURE_UPDATE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.CREATURE_UPDATE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.CREATURE_UPDATE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.CREATURE_UPDATE_CONFLICT);
         }
 
         Logger.info("Creature updated successfully.", updatedCreature.identifier());
@@ -80,44 +68,36 @@ public class CreatureServiceImpl implements CreatureService {
     }
 
     @Override
-    public void delete(String identifier) throws APIException {
+    public void delete(String identifier) throws ServiceException {
         try {
             repository.delete(identifier);
         } catch (Exception e) {
             Logger.error(String.format("An error has occurred while removing a creature: %s.", identifier), e.getMessage());
 
-            throw new APIException(
-                    HeraldsOfChaosAPIError.CREATURE_DELETE_CONFLICT.code,
-                    HeraldsOfChaosAPIError.CREATURE_DELETE_CONFLICT.message,
-                    HeraldsOfChaosAPIError.CREATURE_DELETE_CONFLICT.status
-            );
+            throw new ServiceException(HeraldsOfChaosError.CREATURE_DELETE_CONFLICT);
         }
 
         Logger.info("Creature removed successfully.", identifier);
     }
 
     @Override
-    public CreatureODTO get(String identifier, String language) throws APIException {
+    public CreatureODTO get(String identifier, String language) throws ServiceException {
         final var creature = repository.get(identifier).orElseThrow(() ->
-                new APIException(
-                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.code,
-                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.message,
-                        HeraldsOfChaosAPIError.CREATURE_NOT_FOUND.status
-                )
+                new ServiceException(HeraldsOfChaosError.CREATURE_NOT_FOUND)
         );
 
         return mapper.toODTO(creature, language);
     }
 
     @Override
-    public List<CreatureODTO> list(String language) throws APIException {
+    public List<CreatureODTO> list(String language) throws ServiceException {
         final var creatures = repository.list();
 
         return creatures.stream().map(creature -> mapper.toODTO(creature, language)).toList();
     }
 
     @Override
-    public Page<Map<String, Object>> page(Pageable pageable, String language) throws APIException {
+    public Page<Map<String, Object>> page(Pageable pageable, String language) throws ServiceException {
         final var creatures = repository.page(pageable);
 
         return creatures.map(creature -> mapper.toODTO(creature, language).toMap());
