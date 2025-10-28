@@ -5,7 +5,6 @@ import org.gycoding.heraldsofchaos.application.service.ItemService;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.items.ItemRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.ItemControllerMapper;
-import org.gycoding.quasar.exceptions.model.ServiceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +34,7 @@ public class ItemDataControllerTest {
 
     @Test
     @DisplayName("[ITEM_DATA_CONTROLLER] - Test successful retrieval of a Item.")
-    void testGetItem() throws ServiceException {
+    void testGetItem() throws Exception {
         // When
         final var itemODTO = mock(ItemODTO.class);
         final var itemRSDTO = mock(ItemRSDTO.class);
@@ -57,7 +56,7 @@ public class ItemDataControllerTest {
 
     @Test
     @DisplayName("[ITEM_DATA_CONTROLLER] - Test successful retrieval of a list of Items.")
-    void testListItems() throws ServiceException {
+    void testListItems() throws Exception {
         // When
         final var itemODTO = mock(ItemODTO.class);
         final var itemRSDTO = mock(ItemRSDTO.class);
@@ -78,7 +77,7 @@ public class ItemDataControllerTest {
 
     @Test
     @DisplayName("[ITEM_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Items.")
-    void testPageItems() throws ServiceException {
+    void testPageItems() throws Exception {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedItems = mock(Page.class);

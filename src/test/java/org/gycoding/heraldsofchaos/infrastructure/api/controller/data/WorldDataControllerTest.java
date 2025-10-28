@@ -9,7 +9,6 @@ import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.worlds.PlaceRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.worlds.WorldRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.PlaceControllerMapper;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.WorldControllerMapper;
-import org.gycoding.quasar.exceptions.model.ServiceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +44,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a World.")
-    void testGetWorld() throws ServiceException {
+    void testGetWorld() throws Exception {
         // When
         final var worldODTO = mock(WorldODTO.class);
         final var worldRSDTO = mock(WorldRSDTO.class);
@@ -67,7 +66,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a list of Worlds.")
-    void testListWorld() throws ServiceException {
+    void testListWorld() throws Exception {
         // When
         final var worldODTO = mock(WorldODTO.class);
         final var worldRSDTO = mock(WorldRSDTO.class);
@@ -88,7 +87,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Worlds.")
-    void testPageWorld() throws ServiceException {
+    void testPageWorld() throws Exception {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedWorlds = mock(Page.class);
@@ -109,7 +108,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a Place.")
-    void testGetPlace() throws ServiceException {
+    void testGetPlace() throws Exception {
         // When
         final var placeODTO = mock(PlaceODTO.class);
         final var placeRSDTO = mock(PlaceRSDTO.class);
@@ -131,7 +130,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a list of Places.")
-    void testListPlaces() throws ServiceException {
+    void testListPlaces() throws Exception {
         // When
         final var placeODTO = mock(PlaceODTO.class);
         final var placeRSDTO = mock(PlaceRSDTO.class);
@@ -152,7 +151,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Places.")
-    void testPagePlaces() throws ServiceException {
+    void testPagePlaces() throws Exception {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedPlaces = mock(Page.class);
@@ -173,7 +172,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a list of Places inside an specified World.")
-    void testListWorldPlaces() throws ServiceException {
+    void testListWorldPlaces() throws Exception {
         // When
         final var placeODTO = mock(PlaceODTO.class);
         final var placeRSDTO = mock(PlaceRSDTO.class);

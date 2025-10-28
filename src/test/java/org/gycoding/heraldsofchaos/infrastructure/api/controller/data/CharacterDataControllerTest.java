@@ -5,7 +5,6 @@ import org.gycoding.heraldsofchaos.application.service.CharacterService;
 import org.gycoding.heraldsofchaos.domain.model.TranslatedString;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.characters.CharacterRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.CharacterControllerMapper;
-import org.gycoding.quasar.exceptions.model.ServiceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +34,7 @@ public class CharacterDataControllerTest {
 
     @Test
     @DisplayName("[CHARACTER_DATA_CONTROLLER] - Test successful retrieval of a Character.")
-    void testGetCharacter() throws ServiceException {
+    void testGetCharacter() throws Exception {
         // When
         final var characterODTO = mock(CharacterODTO.class);
         final var characterRSDTO = mock(CharacterRSDTO.class);
@@ -57,7 +56,7 @@ public class CharacterDataControllerTest {
 
     @Test
     @DisplayName("[CHARACTER_DATA_CONTROLLER] - Test successful retrieval of a list of Characters.")
-    void testListCharacters() throws ServiceException {
+    void testListCharacters() throws Exception {
         // When
         final var characterODTO = mock(CharacterODTO.class);
         final var characterRSDTO = mock(CharacterRSDTO.class);
@@ -78,7 +77,7 @@ public class CharacterDataControllerTest {
 
     @Test
     @DisplayName("[CHARACTER_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Characters.")
-    void testPageCharacters() throws ServiceException {
+    void testPageCharacters() throws Exception {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedCharacters = mock(Page.class);
