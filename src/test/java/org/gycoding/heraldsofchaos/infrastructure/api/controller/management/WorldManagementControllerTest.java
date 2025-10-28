@@ -12,6 +12,7 @@ import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.worlds.PlaceRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.worlds.WorldRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.PlaceControllerMapper;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.WorldControllerMapper;
+import org.gycoding.quasar.exceptions.model.QuasarException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +43,7 @@ public class WorldManagementControllerTest {
 
     @Test
     @DisplayName("[WORLD_MANAGEMENT_CONTROLLER] - Test successful save of a World.")
-    void testSaveWorld() throws Exception {
+    void testSaveWorld() throws QuasarException {
         // When
         final var worldRQDTO = mock(WorldRQDTO.class);
         final var worldIDTO = mock(WorldIDTO.class);
@@ -67,7 +68,7 @@ public class WorldManagementControllerTest {
 
     @Test
     @DisplayName("[WORLD_MANAGEMENT_CONTROLLER] - Test successful update of a World.")
-    void testUpdateWorld() throws Exception {
+    void testUpdateWorld() throws QuasarException {
         // When
         final var worldRQDTO = mock(WorldRQDTO.class);
         final var worldIDTO = mock(WorldIDTO.class);
@@ -93,7 +94,7 @@ public class WorldManagementControllerTest {
 
     @Test
     @DisplayName("[WORLD_MANAGEMENT_CONTROLLER] - Test successful removal of a World.")
-    void testRemoveWorld() throws Exception {
+    void testRemoveWorld() throws QuasarException {
         // When
         final var id = "mock-world-id";
 
@@ -106,7 +107,7 @@ public class WorldManagementControllerTest {
 
     @Test
     @DisplayName("[WORLD_MANAGEMENT_CONTROLLER] - Test successful save of a Place.")
-    void testSavePlace() throws Exception {
+    void testSavePlace() throws QuasarException {
         // When
         final var placeRQDTO = mock(PlaceRQDTO.class);
         final var placeIDTO = mock(PlaceIDTO.class);
@@ -131,7 +132,7 @@ public class WorldManagementControllerTest {
 
     @Test
     @DisplayName("[WORLD_MANAGEMENT_CONTROLLER] - Test successful update of a Place.")
-    void testUpdatePlace() throws Exception {
+    void testUpdatePlace() throws QuasarException {
         //Place
         final var placeRQDTO = mock(PlaceRQDTO.class);
         final var placeIDTO = mock(PlaceIDTO.class);
@@ -157,7 +158,7 @@ public class WorldManagementControllerTest {
 
     @Test
     @DisplayName("[WORLD_MANAGEMENT_CONTROLLER] - Test successful removal of a Place.")
-    void testRemovePlace() throws Exception {
+    void testRemovePlace() throws QuasarException {
         // When
         final var id = "mock-place-id";
 

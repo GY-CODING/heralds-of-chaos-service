@@ -6,6 +6,7 @@ import org.gycoding.heraldsofchaos.application.service.ItemService;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.in.items.ItemRQDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.items.ItemRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.ItemControllerMapper;
+import org.gycoding.quasar.exceptions.model.QuasarException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ public class ItemManagementControllerTest {
 
     @Test
     @DisplayName("[ITEM_MANAGEMENT_CONTROLLER] - Test successful save of a Item.")
-    void testSaveItem() throws Exception {
+    void testSaveItem() throws QuasarException {
         // When
         final var itemRQDTO = mock(ItemRQDTO.class);
         final var itemIDTO = mock(ItemIDTO.class);
@@ -55,7 +56,7 @@ public class ItemManagementControllerTest {
 
     @Test
     @DisplayName("[ITEM_MANAGEMENT_CONTROLLER] - Test successful update of a Item.")
-    void testUpdateItem() throws Exception {
+    void testUpdateItem() throws QuasarException {
         // When
         final var itemRQDTO = mock(ItemRQDTO.class);
         final var itemIDTO = mock(ItemIDTO.class);
@@ -81,7 +82,7 @@ public class ItemManagementControllerTest {
 
     @Test
     @DisplayName("[ITEM_MANAGEMENT_CONTROLLER] - Test successful removal of a Item.")
-    void testRemoveItem() throws Exception {
+    void testRemoveItem() throws QuasarException {
         // When
         final var id = "mock-item-id";
 

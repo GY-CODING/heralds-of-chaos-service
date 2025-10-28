@@ -9,6 +9,7 @@ import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.worlds.PlaceRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.worlds.WorldRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.PlaceControllerMapper;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.WorldControllerMapper;
+import org.gycoding.quasar.exceptions.model.QuasarException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +45,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a World.")
-    void testGetWorld() throws Exception {
+    void testGetWorld() throws QuasarException {
         // When
         final var worldODTO = mock(WorldODTO.class);
         final var worldRSDTO = mock(WorldRSDTO.class);
@@ -66,7 +67,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a list of Worlds.")
-    void testListWorld() throws Exception {
+    void testListWorld() throws QuasarException {
         // When
         final var worldODTO = mock(WorldODTO.class);
         final var worldRSDTO = mock(WorldRSDTO.class);
@@ -87,7 +88,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Worlds.")
-    void testPageWorld() throws Exception {
+    void testPageWorld() throws QuasarException {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedWorlds = mock(Page.class);
@@ -108,7 +109,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a Place.")
-    void testGetPlace() throws Exception {
+    void testGetPlace() throws QuasarException {
         // When
         final var placeODTO = mock(PlaceODTO.class);
         final var placeRSDTO = mock(PlaceRSDTO.class);
@@ -130,7 +131,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a list of Places.")
-    void testListPlaces() throws Exception {
+    void testListPlaces() throws QuasarException {
         // When
         final var placeODTO = mock(PlaceODTO.class);
         final var placeRSDTO = mock(PlaceRSDTO.class);
@@ -151,7 +152,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a paginated list of Places.")
-    void testPagePlaces() throws Exception {
+    void testPagePlaces() throws QuasarException {
         // When
         final Pageable pageable = Pageable.ofSize(10).withPage(0);
         final Page<Map<String, Object>> pagedPlaces = mock(Page.class);
@@ -172,7 +173,7 @@ public class WorldDataControllerTest {
 
     @Test
     @DisplayName("[WORLD_DATA_CONTROLLER] - Test successful retrieval of a list of Places inside an specified World.")
-    void testListWorldPlaces() throws Exception {
+    void testListWorldPlaces() throws QuasarException {
         // When
         final var placeODTO = mock(PlaceODTO.class);
         final var placeRSDTO = mock(PlaceRSDTO.class);

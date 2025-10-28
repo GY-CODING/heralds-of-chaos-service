@@ -6,6 +6,7 @@ import org.gycoding.heraldsofchaos.application.service.CreatureService;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.in.creatures.CreatureRQDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.creatures.CreatureRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.CreatureControllerMapper;
+import org.gycoding.quasar.exceptions.model.QuasarException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ public class CreatureManagementControllerTest {
 
     @Test
     @DisplayName("[CREATURE_MANAGEMENT_CONTROLLER] - Test successful save of a Creature.")
-    void testSaveCreature() throws Exception {
+    void testSaveCreature() throws QuasarException {
         // When
         final var creatureRQDTO = mock(CreatureRQDTO.class);
         final var creatureIDTO = mock(CreatureIDTO.class);
@@ -55,7 +56,7 @@ public class CreatureManagementControllerTest {
 
     @Test
     @DisplayName("[CREATURE_MANAGEMENT_CONTROLLER] - Test successful update of a Creature.")
-    void testUpdateCreature() throws Exception {
+    void testUpdateCreature() throws QuasarException {
         // When
         final var creatureRQDTO = mock(CreatureRQDTO.class);
         final var creatureIDTO = mock(CreatureIDTO.class);
@@ -81,7 +82,7 @@ public class CreatureManagementControllerTest {
 
     @Test
     @DisplayName("[CREATURE_MANAGEMENT_CONTROLLER] - Test successful removal of a Creature.")
-    void testRemoveCreature() throws Exception {
+    void testRemoveCreature() throws QuasarException {
         // When
         final var id = "mock-creature-id";
 

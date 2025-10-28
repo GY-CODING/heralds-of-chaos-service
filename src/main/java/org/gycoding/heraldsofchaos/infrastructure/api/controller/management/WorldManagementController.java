@@ -8,6 +8,7 @@ import org.gycoding.heraldsofchaos.infrastructure.api.dto.in.worlds.PlaceRQDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.in.worlds.WorldRQDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.PlaceControllerMapper;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.WorldControllerMapper;
+import org.gycoding.quasar.exceptions.model.QuasarException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,34 +25,34 @@ public class WorldManagementController {
     private final PlaceControllerMapper placeMapper;
 
     @PostMapping("")
-    public ResponseEntity<?> save(@Valid @RequestBody WorldRQDTO world) throws Exception {
+    public ResponseEntity<?> save(@Valid @RequestBody WorldRQDTO world) throws QuasarException {
         return ResponseEntity.ok(worldMapper.toRSDTO(worldService.save(worldMapper.toIDTO(world))));
     }
 
     @PatchMapping("")
-    public ResponseEntity<?> update(@Valid @RequestBody WorldRQDTO world, @RequestParam String id) throws Exception {
+    public ResponseEntity<?> update(@Valid @RequestBody WorldRQDTO world, @RequestParam String id) throws QuasarException {
         return ResponseEntity.ok(worldMapper.toRSDTO(worldService.update(worldMapper.toIDTO(world, id))));
     }
 
     @DeleteMapping("")
-    public ResponseEntity<?> removeWorld(@RequestParam String id) throws Exception {
+    public ResponseEntity<?> removeWorld(@RequestParam String id) throws QuasarException {
         worldService.delete(id);
 
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/places")
-    public ResponseEntity<?> save(@Valid @RequestBody PlaceRQDTO place) throws Exception {
+    public ResponseEntity<?> save(@Valid @RequestBody PlaceRQDTO place) throws QuasarException {
         return ResponseEntity.ok(placeMapper.toRSDTO(placeService.save(placeMapper.toIDTO(place))));
     }
 
     @PatchMapping("/places")
-    public ResponseEntity<?> update(@Valid @RequestBody PlaceRQDTO place, @RequestParam String id) throws Exception {
+    public ResponseEntity<?> update(@Valid @RequestBody PlaceRQDTO place, @RequestParam String id) throws QuasarException {
         return ResponseEntity.ok(placeMapper.toRSDTO(placeService.update(placeMapper.toIDTO(place, id))));
     }
 
     @DeleteMapping("/places")
-    public ResponseEntity<?> removePlace(@RequestParam String id) throws Exception {
+    public ResponseEntity<?> removePlace(@RequestParam String id) throws QuasarException {
         placeService.delete(id);
 
         return ResponseEntity.noContent().build();

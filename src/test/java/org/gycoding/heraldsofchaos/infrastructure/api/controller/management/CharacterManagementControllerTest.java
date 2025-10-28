@@ -6,6 +6,7 @@ import org.gycoding.heraldsofchaos.application.service.CharacterService;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.in.characters.CharacterRQDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.dto.out.characters.CharacterRSDTO;
 import org.gycoding.heraldsofchaos.infrastructure.api.mapper.CharacterControllerMapper;
+import org.gycoding.quasar.exceptions.model.QuasarException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ public class CharacterManagementControllerTest {
 
     @Test
     @DisplayName("[CHARACTER_MANAGEMENT_CONTROLLER] - Test successful save of a Character.")
-    void testSaveCharacter() throws Exception {
+    void testSaveCharacter() throws QuasarException {
         // When
         final var characterRQDTO = mock(CharacterRQDTO.class);
         final var characterIDTO = mock(CharacterIDTO.class);
@@ -55,7 +56,7 @@ public class CharacterManagementControllerTest {
 
     @Test
     @DisplayName("[CHARACTER_MANAGEMENT_CONTROLLER] - Test successful update of a Character.")
-    void testUpdateCharacter() throws Exception {
+    void testUpdateCharacter() throws QuasarException {
         // When
         final var characterRQDTO = mock(CharacterRQDTO.class);
         final var characterIDTO = mock(CharacterIDTO.class);
@@ -81,7 +82,7 @@ public class CharacterManagementControllerTest {
 
     @Test
     @DisplayName("[CHARACTER_MANAGEMENT_CONTROLLER] - Test successful removal of a Character.")
-    void testRemoveCharacter() throws Exception {
+    void testRemoveCharacter() throws QuasarException {
         // When
         final var id = "mock-character-id";
 
