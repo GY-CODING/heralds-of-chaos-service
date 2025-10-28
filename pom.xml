@@ -18,15 +18,10 @@
 	</properties>
 
 	<dependencies>
-        <!-- GYCODING Dependencies -->
         <dependency>
             <groupId>org.gycoding</groupId>
             <artifactId>quasar</artifactId>
             <version>${quasar.version}</version>
         </dependency>
 	</dependencies>
-
-    <build>
-        <finalName>${project.artifactId}</finalName>
-	</build>
 </project>
