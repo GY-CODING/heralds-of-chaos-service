@@ -12,7 +12,7 @@ pipeline {
                 script {
                     try {
                             build job:
-                                'Back/Test/Heralds of Chaos',
+                                'Back/Test/Service/Production/Heralds of Chaos',
                                 wait: true,
                                 propagate: true
                     } catch (Exception e) {
