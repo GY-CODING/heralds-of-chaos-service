@@ -103,11 +103,7 @@ public class PlaceDatabaseImplTest {
     void testWrongUpdatePlace() {
         // When
         final var placeMO = mock(PlaceMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.PLACE_NOT_FOUND.code,
-                HeraldsOfChaosError.PLACE_NOT_FOUND.message,
-                HeraldsOfChaosError.PLACE_NOT_FOUND.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.PLACE_NOT_FOUND);
 
         when(repository.findByIdentifier(placeMO.identifier())).thenReturn(Optional.empty());
 

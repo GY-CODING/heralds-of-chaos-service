@@ -141,11 +141,7 @@ public class CharacterDatabaseImplTest {
     void testWrongUpdateCharacter() {
         // When
         final var characterMO = mock(CharacterMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.CHARACTER_NOT_FOUND.code,
-                HeraldsOfChaosError.CHARACTER_NOT_FOUND.message,
-                HeraldsOfChaosError.CHARACTER_NOT_FOUND.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.CHARACTER_NOT_FOUND);
 
         when(repository.findByIdentifier(characterMO.identifier())).thenReturn(Optional.empty());
 

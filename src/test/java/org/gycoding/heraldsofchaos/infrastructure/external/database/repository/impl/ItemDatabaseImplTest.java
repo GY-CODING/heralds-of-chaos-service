@@ -103,11 +103,7 @@ public class ItemDatabaseImplTest {
     void testWrongUpdateItem() {
         // When
         final var itemMO = mock(ItemMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.ITEM_NOT_FOUND.code,
-                HeraldsOfChaosError.ITEM_NOT_FOUND.message,
-                HeraldsOfChaosError.ITEM_NOT_FOUND.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.ITEM_NOT_FOUND);
 
         when(repository.findByIdentifier(itemMO.identifier())).thenReturn(Optional.empty());
 

@@ -78,11 +78,7 @@ public class CreatureServiceImplTest {
         // When
         final var creatureIDTO = mock(CreatureIDTO.class);
         final var creatureMO = mock(CreatureMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.CREATURE_ALREADY_EXISTS_CONFLICT.code,
-                HeraldsOfChaosError.CREATURE_ALREADY_EXISTS_CONFLICT.message,
-                HeraldsOfChaosError.CREATURE_ALREADY_EXISTS_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.CREATURE_ALREADY_EXISTS_CONFLICT);
 
         when(repository.get(creatureMO.identifier())).thenReturn(Optional.of(creatureMO));
 
@@ -102,15 +98,11 @@ public class CreatureServiceImplTest {
 
     @Test
     @DisplayName("[CREATURE_SERVICE] - Test unsuccessful save of a Creature due to an unknown conflict while saving.")
-    void testWrongSaveCreatureUnknownConflict() throws ServiceException {
+    void testWrongSaveCreatureUnknownConflict() {
         // When
         final var creatureIDTO = mock(CreatureIDTO.class);
         final var creatureMO = mock(CreatureMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.CREATURE_SAVE_CONFLICT.code,
-                HeraldsOfChaosError.CREATURE_SAVE_CONFLICT.message,
-                HeraldsOfChaosError.CREATURE_SAVE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.CREATURE_SAVE_CONFLICT);
 
         when(repository.get(creatureMO.identifier())).thenReturn(Optional.empty());
         when(mapper.toMO(creatureIDTO)).thenReturn(creatureMO);
@@ -159,15 +151,11 @@ public class CreatureServiceImplTest {
 
     @Test
     @DisplayName("[CREATURE_SERVICE] - Test unsuccessful update of a Creature due to an unknown conflict while updating.")
-    void testWrongUpdateCreatureUnknownConflict() throws ServiceException, DatabaseException {
+    void testWrongUpdateCreatureUnknownConflict() throws DatabaseException {
         // When
         final var creatureIDTO = mock(CreatureIDTO.class);
         final var creatureMO = mock(CreatureMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.CREATURE_UPDATE_CONFLICT.code,
-                HeraldsOfChaosError.CREATURE_UPDATE_CONFLICT.message,
-                HeraldsOfChaosError.CREATURE_UPDATE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.CREATURE_UPDATE_CONFLICT);
 
         when(mapper.toMO(creatureIDTO)).thenReturn(creatureMO);
         when(repository.update(creatureMO)).thenThrow(new RuntimeException("Any exception."));
@@ -206,11 +194,7 @@ public class CreatureServiceImplTest {
     void testWrongDeleteCreatureUnknownConflict() {
         // When
         final var id = "mock-creature-identifier";
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.CREATURE_DELETE_CONFLICT.code,
-                HeraldsOfChaosError.CREATURE_DELETE_CONFLICT.message,
-                HeraldsOfChaosError.CREATURE_DELETE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.CREATURE_DELETE_CONFLICT);
 
         doThrow(new RuntimeException("Any exception.")).when(repository).delete(id);
 
@@ -255,11 +239,7 @@ public class CreatureServiceImplTest {
     void testWrongGetCreatureNotFound() {
         // When
         final var id = "mock-creature-identifier";
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.CREATURE_NOT_FOUND.code,
-                HeraldsOfChaosError.CREATURE_NOT_FOUND.message,
-                HeraldsOfChaosError.CREATURE_NOT_FOUND.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.CREATURE_NOT_FOUND);
 
         when(repository.get(id)).thenReturn(Optional.empty());
 

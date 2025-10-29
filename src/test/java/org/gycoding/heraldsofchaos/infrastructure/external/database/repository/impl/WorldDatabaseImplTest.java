@@ -117,11 +117,7 @@ public class WorldDatabaseImplTest {
         // When
         final var worldMO = mock(WorldMO.class);
         final var places = List.of("mock-place-identifier");
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.WORLD_NOT_FOUND.code,
-                HeraldsOfChaosError.WORLD_NOT_FOUND.message,
-                HeraldsOfChaosError.WORLD_NOT_FOUND.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.WORLD_NOT_FOUND);
 
         when(repository.findByIdentifier(worldMO.identifier())).thenReturn(Optional.empty());
 

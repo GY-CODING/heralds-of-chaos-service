@@ -78,11 +78,7 @@ public class ItemServiceImplTest {
         // When
         final var itemIDTO = mock(ItemIDTO.class);
         final var itemMO = mock(ItemMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.ITEM_ALREADY_EXISTS_CONFLICT.code,
-                HeraldsOfChaosError.ITEM_ALREADY_EXISTS_CONFLICT.message,
-                HeraldsOfChaosError.ITEM_ALREADY_EXISTS_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.ITEM_ALREADY_EXISTS_CONFLICT);
 
         when(repository.get(itemMO.identifier())).thenReturn(Optional.of(itemMO));
 
@@ -102,15 +98,11 @@ public class ItemServiceImplTest {
 
     @Test
     @DisplayName("[ITEM_SERVICE] - Test unsuccessful save of a Item due to an unknown conflict while saving.")
-    void testWrongSaveItemUnknownConflict() throws ServiceException {
+    void testWrongSaveItemUnknownConflict() {
         // When
         final var itemIDTO = mock(ItemIDTO.class);
         final var itemMO = mock(ItemMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.ITEM_SAVE_CONFLICT.code,
-                HeraldsOfChaosError.ITEM_SAVE_CONFLICT.message,
-                HeraldsOfChaosError.ITEM_SAVE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.ITEM_SAVE_CONFLICT);
 
         when(repository.get(itemMO.identifier())).thenReturn(Optional.empty());
         when(mapper.toMO(itemIDTO)).thenReturn(itemMO);
@@ -159,15 +151,11 @@ public class ItemServiceImplTest {
 
     @Test
     @DisplayName("[ITEM_SERVICE] - Test unsuccessful update of a Item due to an unknown conflict while updating.")
-    void testWrongUpdateItemUnknownConflict() throws ServiceException, DatabaseException {
+    void testWrongUpdateItemUnknownConflict() throws DatabaseException {
         // When
         final var itemIDTO = mock(ItemIDTO.class);
         final var itemMO = mock(ItemMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.ITEM_UPDATE_CONFLICT.code,
-                HeraldsOfChaosError.ITEM_UPDATE_CONFLICT.message,
-                HeraldsOfChaosError.ITEM_UPDATE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.ITEM_UPDATE_CONFLICT);
 
         when(mapper.toMO(itemIDTO)).thenReturn(itemMO);
         when(repository.update(itemMO)).thenThrow(new RuntimeException("Any exception."));
@@ -206,11 +194,7 @@ public class ItemServiceImplTest {
     void testWrongDeleteItemUnknownConflict() {
         // When
         final var id = "mock-item-identifier";
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.ITEM_DELETE_CONFLICT.code,
-                HeraldsOfChaosError.ITEM_DELETE_CONFLICT.message,
-                HeraldsOfChaosError.ITEM_DELETE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.ITEM_DELETE_CONFLICT);
 
         doThrow(new RuntimeException("Any exception.")).when(repository).delete(id);
 
@@ -255,11 +239,7 @@ public class ItemServiceImplTest {
     void testWrongGetItemNotFound() {
         // When
         final var id = "mock-item-identifier";
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.ITEM_NOT_FOUND.code,
-                HeraldsOfChaosError.ITEM_NOT_FOUND.message,
-                HeraldsOfChaosError.ITEM_NOT_FOUND.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.ITEM_NOT_FOUND);
 
         when(repository.get(id)).thenReturn(Optional.empty());
 

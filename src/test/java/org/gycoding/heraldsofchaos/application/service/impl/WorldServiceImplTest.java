@@ -78,11 +78,7 @@ public class WorldServiceImplTest {
         // When
         final var worldIDTO = mock(WorldIDTO.class);
         final var worldMO = mock(WorldMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.WORLD_ALREADY_EXISTS_CONFLICT.code,
-                HeraldsOfChaosError.WORLD_ALREADY_EXISTS_CONFLICT.message,
-                HeraldsOfChaosError.WORLD_ALREADY_EXISTS_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.WORLD_ALREADY_EXISTS_CONFLICT);
 
         when(repository.get(worldMO.identifier())).thenReturn(Optional.of(worldMO));
 
@@ -106,11 +102,7 @@ public class WorldServiceImplTest {
         // When
         final var worldIDTO = mock(WorldIDTO.class);
         final var worldMO = mock(WorldMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.WORLD_SAVE_CONFLICT.code,
-                HeraldsOfChaosError.WORLD_SAVE_CONFLICT.message,
-                HeraldsOfChaosError.WORLD_SAVE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.WORLD_SAVE_CONFLICT);
 
         when(repository.get(worldMO.identifier())).thenReturn(Optional.empty());
         when(mapper.toMO(worldIDTO)).thenReturn(worldMO);
@@ -159,15 +151,11 @@ public class WorldServiceImplTest {
 
     @Test
     @DisplayName("[WORLD_SERVICE] - Test unsuccessful update of a World due to an unknown conflict while updating.")
-    void testWrongUpdateWorldUnknownConflict() throws ServiceException, DatabaseException {
+    void testWrongUpdateWorldUnknownConflict() throws DatabaseException {
         // When
         final var worldIDTO = mock(WorldIDTO.class);
         final var worldMO = mock(WorldMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.WORLD_UPDATE_CONFLICT.code,
-                HeraldsOfChaosError.WORLD_UPDATE_CONFLICT.message,
-                HeraldsOfChaosError.WORLD_UPDATE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.WORLD_UPDATE_CONFLICT);
 
         when(mapper.toMO(worldIDTO)).thenReturn(worldMO);
         when(repository.update(worldMO, worldIDTO.places())).thenThrow(new RuntimeException("Any exception."));
@@ -206,11 +194,7 @@ public class WorldServiceImplTest {
     void testWrongDeleteWorldUnknownConflict() {
         // When
         final var id = "mock-world-identifier";
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.WORLD_DELETE_CONFLICT.code,
-                HeraldsOfChaosError.WORLD_DELETE_CONFLICT.message,
-                HeraldsOfChaosError.WORLD_DELETE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.WORLD_DELETE_CONFLICT);
 
         doThrow(new RuntimeException("Any exception.")).when(repository).delete(id);
 
@@ -255,11 +239,7 @@ public class WorldServiceImplTest {
     void testWrongGetWorldNotFound() {
         // When
         final var id = "mock-world-identifier";
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.WORLD_NOT_FOUND.code,
-                HeraldsOfChaosError.WORLD_NOT_FOUND.message,
-                HeraldsOfChaosError.WORLD_NOT_FOUND.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.WORLD_NOT_FOUND);
 
         when(repository.get(id)).thenReturn(Optional.empty());
 

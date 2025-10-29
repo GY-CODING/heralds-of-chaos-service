@@ -78,11 +78,7 @@ public class PlaceServiceImplTest {
         // When
         final var placeIDTO = mock(PlaceIDTO.class);
         final var placeMO = mock(PlaceMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.PLACE_ALREADY_EXISTS_CONFLICT.code,
-                HeraldsOfChaosError.PLACE_ALREADY_EXISTS_CONFLICT.message,
-                HeraldsOfChaosError.PLACE_ALREADY_EXISTS_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.PLACE_ALREADY_EXISTS_CONFLICT);
 
         when(repository.get(placeMO.identifier())).thenReturn(Optional.of(placeMO));
 
@@ -102,15 +98,11 @@ public class PlaceServiceImplTest {
 
     @Test
     @DisplayName("[PLACE_SERVICE] - Test unsuccessful save of a Place due to an unknown conflict while saving.")
-    void testWrongSavePlaceUnknownConflict() throws ServiceException {
+    void testWrongSavePlaceUnknownConflict() {
         // When
         final var placeIDTO = mock(PlaceIDTO.class);
         final var placeMO = mock(PlaceMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.PLACE_SAVE_CONFLICT.code,
-                HeraldsOfChaosError.PLACE_SAVE_CONFLICT.message,
-                HeraldsOfChaosError.PLACE_SAVE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.PLACE_SAVE_CONFLICT);
 
         when(repository.get(placeMO.identifier())).thenReturn(Optional.empty());
         when(mapper.toMO(placeIDTO)).thenReturn(placeMO);
@@ -159,15 +151,11 @@ public class PlaceServiceImplTest {
 
     @Test
     @DisplayName("[PLACE_SERVICE] - Test unsuccessful update of a Place due to an unknown conflict while updating.")
-    void testWrongUpdatePlaceUnknownConflict() throws ServiceException, DatabaseException {
+    void testWrongUpdatePlaceUnknownConflict() throws DatabaseException {
         // When
         final var placeIDTO = mock(PlaceIDTO.class);
         final var placeMO = mock(PlaceMO.class);
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.PLACE_UPDATE_CONFLICT.code,
-                HeraldsOfChaosError.PLACE_UPDATE_CONFLICT.message,
-                HeraldsOfChaosError.PLACE_UPDATE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.PLACE_UPDATE_CONFLICT);
 
         when(mapper.toMO(placeIDTO)).thenReturn(placeMO);
         when(repository.update(placeMO)).thenThrow(new RuntimeException("Any exception."));
@@ -206,11 +194,7 @@ public class PlaceServiceImplTest {
     void testWrongDeletePlaceUnknownConflict() {
         // When
         final var id = "mock-place-identifier";
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.PLACE_DELETE_CONFLICT.code,
-                HeraldsOfChaosError.PLACE_DELETE_CONFLICT.message,
-                HeraldsOfChaosError.PLACE_DELETE_CONFLICT.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.PLACE_DELETE_CONFLICT);
 
         doThrow(new RuntimeException("Any exception.")).when(repository).delete(id);
 
@@ -255,11 +239,7 @@ public class PlaceServiceImplTest {
     void testWrongGetPlaceNotFound() {
         // When
         final var id = "mock-place-identifier";
-        final var expectedException = new ServiceException(
-                HeraldsOfChaosError.PLACE_NOT_FOUND.code,
-                HeraldsOfChaosError.PLACE_NOT_FOUND.message,
-                HeraldsOfChaosError.PLACE_NOT_FOUND.status
-        );
+        final var expectedException = new ServiceException(HeraldsOfChaosError.PLACE_NOT_FOUND);
 
         when(repository.get(id)).thenReturn(Optional.empty());
 
