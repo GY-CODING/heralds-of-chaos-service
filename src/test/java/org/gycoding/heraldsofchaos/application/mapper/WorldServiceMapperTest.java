@@ -7,7 +7,7 @@ import org.gycoding.heraldsofchaos.domain.model.worlds.WorldMO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mapstruct.factory.Mappers;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -18,8 +18,7 @@ import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class WorldServiceMapperTest {
-    @InjectMocks
-    private WorldServiceMapperImpl mapper;
+    private final WorldServiceMapper mapper = Mappers.getMapper(WorldServiceMapper.class);
 
     @Test
     @DisplayName("[WORLD_SERVICE_MAPPER] - Test successful mapping from WorldIDTO to WorldMO.")

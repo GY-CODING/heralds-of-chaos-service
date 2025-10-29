@@ -9,7 +9,7 @@ import org.gycoding.heraldsofchaos.shared.IdentifierGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mapstruct.factory.Mappers;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -20,8 +20,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class WorldControllerMapperTest {
-    @InjectMocks
-    private WorldControllerMapperImpl mapper;
+    private final WorldControllerMapper mapper = Mappers.getMapper(WorldControllerMapper.class);
 
     @Test
     @DisplayName("[WORLD_CONTROLLER_MAPPER] - Test successful mapping from WorldRQDTO to WorldIDTO.")

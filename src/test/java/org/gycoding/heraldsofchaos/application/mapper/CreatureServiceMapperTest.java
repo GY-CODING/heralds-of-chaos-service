@@ -6,7 +6,7 @@ import org.gycoding.heraldsofchaos.domain.model.creatures.CreatureMO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mapstruct.factory.Mappers;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,8 +15,7 @@ import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class CreatureServiceMapperTest {
-    @InjectMocks
-    private CreatureServiceMapperImpl mapper;
+    private final CreatureServiceMapper mapper = Mappers.getMapper(CreatureServiceMapper.class);
 
     @Test
     @DisplayName("[CREATURE_SERVICE_MAPPER] - Test successful mapping from CreatureIDTO to CreatureMO.")

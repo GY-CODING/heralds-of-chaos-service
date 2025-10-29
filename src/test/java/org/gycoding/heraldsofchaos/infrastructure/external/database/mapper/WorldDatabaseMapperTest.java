@@ -6,7 +6,7 @@ import org.gycoding.heraldsofchaos.infrastructure.external.database.model.worlds
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mapstruct.factory.Mappers;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -17,8 +17,7 @@ import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class WorldDatabaseMapperTest {
-    @InjectMocks
-    private WorldDatabaseMapperImpl mapper;
+    private final WorldDatabaseMapper mapper = Mappers.getMapper(WorldDatabaseMapper.class);
 
     @Test
     @DisplayName("[WORLD_DATABASE_MAPPER] - Test successful mapping from WorldEntity to WorldMO.")

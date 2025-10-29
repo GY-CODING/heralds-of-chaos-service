@@ -6,7 +6,7 @@ import org.gycoding.heraldsofchaos.domain.model.worlds.PlaceMO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mapstruct.factory.Mappers;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,8 +15,7 @@ import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceServiceMapperTest {
-    @InjectMocks
-    private PlaceServiceMapperImpl mapper;
+    private final PlaceServiceMapper mapper = Mappers.getMapper(PlaceServiceMapper.class);
 
     @Test
     @DisplayName("[PLACE_SERVICE_MAPPER] - Test successful mapping from PlaceIDTO to PlaceMO.")

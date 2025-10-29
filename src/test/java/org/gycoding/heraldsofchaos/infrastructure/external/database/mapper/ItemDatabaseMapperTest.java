@@ -5,7 +5,7 @@ import org.gycoding.heraldsofchaos.infrastructure.external.database.model.items.
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mapstruct.factory.Mappers;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,8 +14,7 @@ import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 public class ItemDatabaseMapperTest {
-    @InjectMocks
-    private ItemDatabaseMapperImpl mapper;
+    private final ItemDatabaseMapper mapper = Mappers.getMapper(ItemDatabaseMapper.class);
 
     @Test
     @DisplayName("[ITEM_DATABASE_MAPPER] - Test successful mapping from ItemEntity to ItemMO.")
