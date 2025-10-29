@@ -9,12 +9,12 @@
     <parent>
         <groupId>org.gycoding</groupId>
         <artifactId>quasar-parent</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
         <relativePath/>
     </parent>
 
     <properties>
-        <quasar.version>0.0.10</quasar.version>
+        <quasar.version>0.0.12</quasar.version>
 	</properties>
 
 	<dependencies>
