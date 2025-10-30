@@ -21,10 +21,10 @@ ENV GITHUB_USERNAME=${GITHUB_USERNAME}
 ENV GITHUB_TOKEN=${GITHUB_TOKEN}
 
 # Copy the settings.xml file to the Maven configuration directory
-COPY src/main/resources/settings.xml /root/.m2/settings.xml
+COPY ../../src/main/resources/settings.xml /root/.m2/settings.xml
 
 # Copy the pom.xml file to the working directory
-COPY pom.xml .
+COPY ../../pom.xml .
 
 # Download the project dependencies
 RUN mvn dependency:go-offline -B -s /root/.m2/settings.xml
@@ -33,7 +33,7 @@ RUN mvn dependency:go-offline -B -s /root/.m2/settings.xml
 RUN ls -la /root/.m2/ && cat /root/.m2/settings.xml
 
 # Copy the source code to the working directory
-COPY src ./src
+COPY ../../src ./src
 
 # Build the application
 RUN mvn package -DskipTests
@@ -59,7 +59,7 @@ ENV GITHUB_USERNAME=${GITHUB_USERNAME}
 ENV GITHUB_TOKEN=${GITHUB_TOKEN}
 
 # Copy the settings.xml file to the Maven configuration directory
-COPY src/main/resources/settings.xml /root/.m2/settings.xml
+COPY ../../src/main/resources/settings.xml /root/.m2/settings.xml
 
 # Verify the settings.xml file exists and print its content
 RUN ls -la /root/.m2/ && cat /root/.m2/settings.xml
