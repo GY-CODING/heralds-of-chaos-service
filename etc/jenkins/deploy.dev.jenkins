@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    environment {
+        DOKPLOY_API_KEY = credentials('DOKPLOY_API_KEY')
+        HOC_DEV_DOKPLOY_APP_ID = credentials('HOC_DEV_DOKPLOY_APP_ID')
+    }
+
+    stages {
+        stage('Run Tests') {
+            steps {
+                script {
+                    try {
+                            build job:
+                                'Back/Test/Service/Heralds of Chaos',
+                                wait: true,
+                                propagate: true
+                    } catch (Exception e) {
+                            echo "Error calling test job: ${e.getMessage()}"
+                            echo "Job path: Back/Test/Service/Heralds of Chaos"
+                            throw e
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Dokploy') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'DOKPLOY_API_KEY', variable: 'API_KEY'),
+                    string(credentialsId: 'HOC_DEV_DOKPLOY_APP_ID', variable: 'APP_ID')
+                ]) {
+                    sh '''
+                        echo "Iniciando despliegue en Dokploy..."
+
+                        DEPLOY_PAYLOAD=$(cat <<EOF
+{
+"applicationId": "$APP_ID"
+}
+EOF
+                        )
+
+                        curl -s -X POST "https://dokploy.gycoding.com/api/application.deploy" \
+                          -H "x-api-key: $API_KEY" \
+                          -H "Content-Type: application/json" \
+                          -d "$DEPLOY_PAYLOAD"
+                    '''
+                }
+            }
+        }
+    }
+}
