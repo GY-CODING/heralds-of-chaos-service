@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOKPLOY_API_KEY = credentials('DOKPLOY_API_KEY')
-        HOC_DOKPLOY_APP_ID = credentials('HOC_DEV_DOKPLOY_APP_ID')
+        HOC_DEV_DOKPLOY_APP_ID = credentials('HOC_DEV_DOKPLOY_APP_ID')
     }
 
     stages {
@@ -17,7 +17,7 @@ pipeline {
                                 propagate: true
                     } catch (Exception e) {
                             echo "Error calling test job: ${e.getMessage()}"
-                            echo "Job path: Back/Test/Heralds of Chaos"
+                            echo "Job path: Back/Test/Service/Heralds of Chaos"
                             throw e
                     }
                 }
@@ -28,7 +28,7 @@ pipeline {
             steps {
                 withCredentials([
                     string(credentialsId: 'DOKPLOY_API_KEY', variable: 'API_KEY'),
-                    string(credentialsId: 'HOC_DOKPLOY_APP_ID', variable: 'APP_ID')
+                    string(credentialsId: 'HOC_DEV_DOKPLOY_APP_ID', variable: 'APP_ID')
                 ]) {
                     sh '''
                         echo "Iniciando despliegue en Dokploy..."

@@ -17,7 +17,7 @@ pipeline {
                                 propagate: true
                     } catch (Exception e) {
                             echo "Error calling test job: ${e.getMessage()}"
-                            echo "Job path: Back/Test/Heralds of Chaos"
+                            echo "Job path: Back/Test/Service/Heralds of Chaos"
                             throw e
                     }
                 }
